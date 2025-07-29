@@ -36,9 +36,14 @@ dependencies = [
     "PyYAML>=5.1",
 ]
 
+[project.urls]
+Homepage = "https://github.com/thomaszwagerman/mkdocs-authors-plugin"
+
+
 [project.optional-dependencies]
 tests = [
-    "pytest"
+    "pytest",
+    "pytest-cov"
 ]
 
 docs = [

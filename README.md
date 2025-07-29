@@ -1,5 +1,5 @@
 # MkDocs Authors Plugin
-![tests](https://github.com/thomaszwgerman/mkdocs-authors-plugin/actions/workflows/tests.yml/badge.svg)
+![tests](https://github.com/thomaszwagerman/mkdocs-authors-plugin/actions/workflows/tests.yml/badge.svg)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/mkdocs-authors-plugin)
 ![GitHub License](https://img.shields.io/github/license/thomaszwagerman/mkdocs-authors-plugin)
 
