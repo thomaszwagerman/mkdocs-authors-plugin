@@ -547,8 +547,8 @@
 <div class="highlight"><pre><span></span><code>pip install mkdocs-authors-plugin
 </code></pre></div>
 <p>If you are developing the plugin locally, navigate to the plugin's root directory (the one containing <code>pyproject.toml</code>) and install it in editable mode:</p>
-<div class="highlight"><pre><span></span><code>cd /path/to/your/mkdocs-authors-plugin/
-pip install -e .
+<div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>/path/to/your/mkdocs-authors-plugin/
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
 </code></pre></div>
 <h2 id="usage">Usage</h2>
 <h3 id="1-configure-mkdocsyml">1. Configure <code>mkdocs.yml</code></h3>
@@ -597,7 +597,7 @@ authors:
 </code></pre></div>
 <h3 id="3-run-mkdocs">3. Run MkDocs</h3>
 <p>Navigate to your main MkDocs documentation project root (the directory containing <code>mkdocs.yml</code>) and run:</p>
-<div class="highlight"><pre><span></span><code>mkdocs serve
+<div class="highlight"><pre><span></span><code>mkdocs<span class="w"> </span>serve
 </code></pre></div>
 <p>The plugin will generate the <code>authors.md</code> page, and you should see it in your site's navigation.</p>
 <h2 id="contributing">Contributing</h2>
