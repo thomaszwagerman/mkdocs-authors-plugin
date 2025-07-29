@@ -35,7 +35,7 @@ jobs:
 
     - name: Build documentation
       run: |
-        mkdocs build -f docs/mkdocs.yml
+        mkdocs build -f mkdocs.yml
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v4
