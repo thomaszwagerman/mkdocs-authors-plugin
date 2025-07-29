@@ -12,10 +12,23 @@ from mkdocs_authors_plugin.plugin import AuthorsPlugin
 
 
 class TestAuthorsPlugin(unittest.TestCase):
+    """
+    Test suite for the AuthorsPlugin.
+
+    This class contains unit tests to verify the functionality of the
+    MkDocs AuthorsPlugin, including successful page generation, handling
+    of missing or malformed YAML files, and correct file management
+    within MkDocs' build process.
+    """
 
     def setUp(self):
         """
         Set up a temporary directory and mock MkDocs environment for each test.
+
+        This method creates a temporary directory structure mimicking an MkDocs
+        project (with 'docs' and 'site' directories) and initializes a mock
+        MkDocs Config object. It also instantiates the AuthorsPlugin and
+        loads its configuration.
         """
         self.tmp_dir = tempfile.mkdtemp()
         self.docs_dir = os.path.join(self.tmp_dir, "docs")
@@ -48,23 +61,38 @@ class TestAuthorsPlugin(unittest.TestCase):
         self.plugin.load_config(
             {"authors_file": ".authors.yml", "output_page": "authors.md"}
         )
-        self.plugin.on_config(self.config)
 
     def tearDown(self):
         """
         Clean up the temporary directory after each test.
+
+        This method removes the temporary directory and all its contents
+        created during the test setup, ensuring a clean state for subsequent tests.
         """
         shutil.rmtree(self.tmp_dir)
 
     def _create_authors_yml(self, content):
-        """Helper to create the .authors.yml file with given content."""
+        """
+        Helper function to create the .authors.yml file with given content.
+
+        Args:
+            content (str): The YAML content to write to the .authors.yml file.
+
+        Returns:
+            str: The full path to the created .authors.yml file.
+        """
         authors_yml_path = os.path.join(self.tmp_dir, ".authors.yml")
         with open(authors_yml_path, "w", encoding="utf-8") as f:
             f.write(content)
         return authors_yml_path
 
     def _read_generated_authors_md(self):
-        """Helper to read the content of the generated authors.md."""
+        """
+        Helper function to read the content of the generated authors.md file.
+
+        Returns:
+            str or None: The content of the authors.md file if it exists, otherwise None.
+        """
         generated_path = os.path.join(self.docs_dir, "authors.md")
         if not os.path.exists(generated_path):
             return None
@@ -72,7 +100,14 @@ class TestAuthorsPlugin(unittest.TestCase):
             return f.read()
 
     def test_authors_page_generation_success(self):
-        """Test that the authors page is generated correctly with valid data."""
+        """
+        Test that the authors page is generated correctly with valid data.
+
+        This test simulates a successful scenario where a well-formed
+        .authors.yml file is provided, and verifies that the plugin
+        generates the authors.md file with the expected Markdown content,
+        including all specified author details and formatting.
+        """
         yml_content = """
 authors:
   author_one:
@@ -114,23 +149,33 @@ authors:
         self.assertIn("[Twitter](https://twitter.com/author_one_dev)", generated_md)
         self.assertIn("## Author Two", generated_md)
         self.assertIn("**ID:** `author_two`", generated_md)
-        self.assertIn(
-            "**Affiliation:** UK Centre for Ecology & Hydrology", generated_md
-        )
+        self.assertIn("**Affiliation:** UK Centre for Ecology & Hydrology", generated_md)
         self.assertIn("> Maintainer", generated_md)
         self.assertNotIn(
             "email", generated_md
         )  # Author Two has no email in this test data
 
     def test_authors_yml_not_found(self):
-        """Test that no authors page is generated if .authors.yml is missing."""
+        """
+        Test that no authors page is generated if .authors.yml is missing.
+
+        This test verifies the plugin's behavior when the specified
+        .authors.yml file does not exist, ensuring that no output Markdown
+        file is created and a warning is likely issued (though not asserted here).
+        """
         # Do not create .authors.yml
         self.plugin.on_pre_build(self.config)
         generated_md = self._read_generated_authors_md()
-        self.assertIsNone(generated_md)
+        self.assertIsNone(generated_md)  # No file should be generated
 
     def test_authors_yml_empty(self):
-        """Test handling of an empty .authors.yml file."""
+        """
+        Test handling of an empty .authors.yml file.
+
+        This test ensures that if the .authors.yml file is empty, the plugin
+        still creates the authors.md file but with a message indicating
+        no authors were found.
+        """
         self._create_authors_yml("")
         self.plugin.on_pre_build(self.config)
         generated_md = self._read_generated_authors_md()
@@ -141,7 +186,13 @@ authors:
         )
 
     def test_authors_yml_malformed(self):
-        """Test handling of a malformed .authors.yml file."""
+        """
+        Test handling of a malformed .authors.yml file.
+
+        This test verifies that if the .authors.yml file contains invalid YAML
+        syntax, the plugin handles the error gracefully by creating the
+        authors.md file with an appropriate error message.
+        """
         self._create_authors_yml("not: valid: yaml")
         self.plugin.on_pre_build(self.config)
         generated_md = self._read_generated_authors_md()
@@ -152,7 +203,14 @@ authors:
         )
 
     def test_authors_yml_wrong_top_level_key(self):
-        """Test handling of .authors.yml with incorrect top-level key."""
+        """
+        Test handling of .authors.yml with an incorrect top-level key.
+
+        This test ensures that if the .authors.yml file has a top-level key
+        other than 'authors', the plugin recognizes the incorrect format and
+        generates the authors.md file with a message indicating no valid
+        authors data was found.
+        """
         yml_content = """
 contributors:
   author_one:
@@ -168,7 +226,13 @@ contributors:
         )
 
     def test_on_files_adds_generated_page(self):
-        """Test that on_files correctly adds the generated authors.md to MkDocs files."""
+        """
+        Test that on_files correctly adds the generated authors.md to MkDocs files.
+
+        This test simulates the 'on_files' hook, verifying that after the
+        authors.md file is generated, it is correctly added to the list of
+        files that MkDocs processes, ensuring it appears in the final build.
+        """
         yml_content = """
 authors:
   author_one:
@@ -196,7 +260,14 @@ authors:
         self.assertEqual(len(updated_files), 3)  # Should have 3 files now
 
     def test_on_files_does_not_duplicate_generated_page(self):
-        """Test that on_files does not add a duplicate if authors.md is already present."""
+        """
+        Test that on_files does not add a duplicate if authors.md is already present.
+
+        This test ensures that if an 'authors.md' file is already present
+        in the MkDocs file list (e.g., if it was manually added to `nav`
+        before generation), the 'on_files' hook does not add a duplicate
+        entry.
+        """
         yml_content = """
 authors:
   author_one:
