@@ -41,6 +41,11 @@ tests = [
     "pytest"
 ]
 
+docs = [
+    "mkdocs",
+    "mkdocs-material",
+]
+
 [project.entry-points."mkdocs.plugins"]
 authors_plugin = "mkdocs_authors_plugin.plugin:AuthorsPlugin"
 
