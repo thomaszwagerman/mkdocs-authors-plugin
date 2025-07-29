@@ -27,7 +27,7 @@ pip install mkdocs-authors-plugin
 
 If you are developing the plugin locally, navigate to the plugin's root directory (the one containing `pyproject.toml`) and install it in editable mode:
 
-```
+```shell
 cd /path/to/your/mkdocs-authors-plugin/
 pip install -e .
 ```
@@ -38,7 +38,7 @@ pip install -e .
 
 Add the `authors_plugin` to your `plugins` list in your `mkdocs.yml` file. You also need to include the `authors.md` page in your `nav` section.
 
-```
+```yml
 # mkdocs.yml
 site_name: My Awesome Docs
 
@@ -62,7 +62,7 @@ Create an `.authors.yml` file in the root directory of your MkDocs documentation
 
 The plugin expects a top-level `authors` key, under which each author is defined by a unique ID (e.g., `author_one`).
 
-```
+```yml
 # .authors.yml
 authors:
   author_one:
@@ -91,7 +91,7 @@ authors:
 
 Navigate to your main MkDocs documentation project root (the directory containing `mkdocs.yml`) and run:
 
-```
+```shell
 mkdocs serve
 ```
 
