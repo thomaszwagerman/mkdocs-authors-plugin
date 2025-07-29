@@ -30,10 +30,8 @@ theme:
 
 nav:
   - Home: index.md
-  - Usage:
-    - Configuration: configuration.md
-    - Authors YAML Format: authors_yaml_format.md
-  - Contributing: contributing.md
+  - Configuration: configuration.md
+  - Authors YAML Format: authors_yaml_format.md
 
 plugins:
   - search
