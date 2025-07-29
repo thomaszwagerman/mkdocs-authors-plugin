@@ -1,5 +1,5 @@
 # MkDocs Authors Plugin
-[![Actions Status](https://github.com/thomaszwagerman/mkdocs-authors-plugin/workflows/pytest/badge.svg)](https://github.com/thomaszwagerman/mkdocs-authors-plugin/actions)
+[![Actions Status](https://github.com/thomaszwagerman/mkdocs-authors-plugin/workflows/test.yml/badge.svg)](https://github.com/thomaszwagerman/mkdocs-authors-plugin/actions)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/mkdocs-authors-plugin)
 
 
