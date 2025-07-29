@@ -1,0 +1,48 @@
+# mkdocs-authors-plugin/pyproject.toml
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mkdocs-authors-plugin"
+version = "0.1.0"
+description = "A MkDocs plugin to generate an authors page from a YAML file."
+readme = "README.md"
+authors = [
+    { name = "Thomas Zwagerman", email = "thozwa@bas.ac.uk" }
+]
+license = { file = "LICENSE" }
+keywords = ["mkdocs", "plugin", "authors", "documentation"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: OS Independent",
+    "Topic :: Documentation",
+    "Topic :: Software Development :: Documentation",
+]
+requires-python = ">=3.7"
+dependencies = [
+    "mkdocs>=1.2",
+    "PyYAML>=5.1",
+]
+
+[project.optional-dependencies]
+tests = [
+    "pytest"
+]
+
+[project.entry-points."mkdocs.plugins"]
+authors_plugin = "mkdocs_authors_plugin.plugin:AuthorsPlugin"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
