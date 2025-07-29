@@ -1,8 +1,8 @@
 # mkdocs-authors-plugin/docs/mkdocs.yml
 site_name: MkDocs Authors Plugin Documentation
-site_url: https://github.com/thomaszwagerman/mkdocs-authors-plugin
+site_url: https://thomaszwagerman.github.io/mkdocs-authors-plugin/
 site_description: Documentation for the MkDocs Authors Plugin
-repo_url: https://thomaszwagerman.github.io/mkdocs-authors-plugin/
+repo_url: https://github.com/thomaszwagerman/mkdocs-authors-plugin
 
 theme:
   name: material
