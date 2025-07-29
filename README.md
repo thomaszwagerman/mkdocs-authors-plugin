@@ -1,4 +1,7 @@
 # MkDocs Authors Plugin
+[![Actions Status](https://github.com/thomaszwagerman/mkdocs-authors-plugin/workflows/pytest/badge.svg)](https://github.com/thomaszwagerman/mkdocs-authors-plugin/actions)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/mkdocs-authors-plugin)
+
 
 A custom MkDocs plugin designed to dynamically generate an "Authors" page for your documentation site from a simple YAML file. This allows you to easily manage and display information about contributors without manually updating Markdown files.
 
