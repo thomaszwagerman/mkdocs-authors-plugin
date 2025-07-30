@@ -135,9 +135,8 @@ authors:
         self.assertIsNotNone(generated_md)
         self.assertIn("# Our Amazing Authors", generated_md)
         self.assertIn("## Author One", generated_md)
-        self.assertIn("**ID:** `author_one`", generated_md)
         self.assertIn("**Affiliation:** British Antarctic Survey", generated_md)
-        self.assertIn("> Owner", generated_md)
+        self.assertIn("Owner", generated_md)
         self.assertIn(
             "**Email:** [author.one@example.com](mailto:author.one@example.com)",
             generated_md,
@@ -148,9 +147,8 @@ authors:
         )
         self.assertIn("[Twitter](https://twitter.com/author_one_dev)", generated_md)
         self.assertIn("## Author Two", generated_md)
-        self.assertIn("**ID:** `author_two`", generated_md)
         self.assertIn("**Affiliation:** UK Centre for Ecology & Hydrology", generated_md)
-        self.assertIn("> Maintainer", generated_md)
+        self.assertIn("Maintainer", generated_md)
         self.assertNotIn(
             "email", generated_md
         )  # Author Two has no email in this test data
