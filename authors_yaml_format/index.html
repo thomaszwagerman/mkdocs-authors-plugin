@@ -443,9 +443,18 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#supported-fields" class="md-nav__link">
+  <a href="#page-data" class="md-nav__link">
     <span class="md-ellipsis">
-      Supported Fields
+      Page Data
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#author-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      Author Data
     </span>
   </a>
   
@@ -511,9 +520,40 @@
 
 <h1 id="authors-yaml-file-format">Authors YAML File Format</h1>
 <p>The <code>mkdocs-authors-plugin</code> expects your author data to be defined in a YAML file (by default, <code>.authors.yml</code>) located in the root of your MkDocs documentation project.</p>
-<p>The YAML file must contain a top-level key named <code>authors</code>, which holds a dictionary of individual author entries. Each author entry is identified by a unique key (e.g., <code>author_one</code>, <code>author_two</code>), which the plugin uses as the author's <code>ID</code>.</p>
-<p>Under each author ID, you can define various fields to describe the author. The plugin will render these fields on the generated authors page.</p>
-<h2 id="supported-fields">Supported Fields</h2>
+<p>The YAML can contain two top-level keys named <code>page_params</code> (optional) and <code>authors</code>.</p>
+<h2 id="page-data">Page Data</h2>
+<p>The <code>page_params</code> key is an optional top-level dictionary that lets you configure characteristics
+of the generated authors page itself, such as its main title and an introductory description.</p>
+<h2 id="author-data">Author Data</h2>
+<p>The <code>authors</code> key is a required top-level dictionary which holds individual author entries.
+Each author entry is identified by a unique key (e.g., <code>author_one</code>, <code>author_two</code>), which the plugin
+uses as the author's ID.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Field</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Description</th>
+<th style="text-align: left;">Example Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>title</code></td>
+<td style="text-align: left;"><code>string</code></td>
+<td style="text-align: left;">The main title of the generated authors page. Defaults to <code>Our Amazing Authors</code>.</td>
+<td style="text-align: left;"><code>Project Contributors</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>description</code></td>
+<td style="text-align: left;"><code>string</code></td>
+<td style="text-align: left;">An introductory paragraph displayed directly under the main title.</td>
+<td style="text-align: left;"><code>Meet our team members.</code></td>
+</tr>
+</tbody>
+</table>
+<p>Under each author ID, you can define various fields to describe the author.
+The plugin will render these fields on the generated authors page.</p>
 <table>
 <thead>
 <tr>
@@ -576,6 +616,14 @@
 </table>
 <h2 id="example-authorsyml">Example <code>.authors.yml</code></h2>
 <div class="highlight"><pre><span></span><code><span class="c1"># .authors.yml</span>
+
+<span class="c1"># Optional: Define page-level parameters for the generated authors page</span>
+<span class="nt">page_params</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Our Project Team</span>
+<span class="w">  </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Meet</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">people</span><span class="nv"> </span><span class="s">behind</span><span class="nv"> </span><span class="s">our</span><span class="nv"> </span><span class="s">project.&quot;</span>
+
+
+<span class="c1"># Required: Define individual author data</span>
 <span class="nt">authors</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">author_one</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Author One</span>
