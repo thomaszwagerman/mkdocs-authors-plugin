@@ -126,7 +126,7 @@ part of the documentation build. This mean a physical file does not have to exis
 
 ## Contributing
 
-Contributions are welcome! If you find a bug or have a feature request, please open an issue or submit a pull request on the [GitHub repository](#).
+Contributions are welcome! If you find a bug or have a feature request, please open an issue or submit a pull request on the [GitHub repository](https://github.com/thomaszwagerman/mkdocs-authors-plugin).
 
 ## License
 
