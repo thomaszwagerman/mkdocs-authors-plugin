@@ -36,6 +36,7 @@ The plugin will render these fields on the generated authors page.
 | `github`      | `string` | The author's GitHub username. Will be rendered as a link to their GitHub profile.                       | `authorone`                                  |
 | `linkedin`    | `string` | The author's LinkedIn profile ID (the part after `linkedin.com/in/`). Will be rendered as a link.      | `author-one-profile`                         |
 | `twitter`     | `string` | The author's Twitter (X) handle. Will be rendered as a link to their Twitter profile.                   | `author_one_dev`                             |
+| `orcid`     | `string` | The author's ORCID ID. Will be rendered as a link to their Orcid profile.                   | `0123-4567-8910-1112`                             |
 
 ## Example `.authors.yml`
 
@@ -61,6 +62,7 @@ authors:
     github: authorone
     linkedin: author-one-profile
     twitter: author_one_dev
+    orcid: 0123-4567-8910-1112
   author_two:
     name: Author Two
     description: Maintainer

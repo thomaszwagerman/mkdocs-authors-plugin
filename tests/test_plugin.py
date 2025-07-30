@@ -97,6 +97,7 @@ authors:
     github: authorone
     linkedin: author-one-profile
     twitter: author_one_dev
+    orcid: 0123-4567-8910-1112
   author_two:
     name: Author Two
     description: Maintainer
@@ -126,6 +127,7 @@ authors:
             "[LinkedIn](https://www.linkedin.com/in/author-one-profile)", generated_md
         )
         self.assertIn("[Twitter](https://twitter.com/author_one_dev)", generated_md)
+        self.assertIn("[ORCID](https://orcid.org/0123-4567-8910-1112)", generated_md)
         self.assertIn("## Author Two", generated_md)
         self.assertIn('<img src="headshot_two.png" alt="Author Two Avatar"', generated_md)
         # Verify default avatar styles (100px square, centered)
@@ -259,7 +261,6 @@ authors:
                 break
         self.assertTrue(found_author_heading, "Should directly follow title with author heading if no description")
 
-
     def test_authors_page_generation_with_default_title_if_not_specified(self):
         """
         Test that the authors page uses the default title if 'page_params' or 'title' is missing.
@@ -290,7 +291,6 @@ authors:
                 break
         self.assertTrue(found_author_heading, "Should directly follow title with author heading if no description")
 
-
     def test_authors_yml_page_params_not_a_dict(self):
         """
         Test handling of .authors.yml where 'page_params' is not a dictionary.
@@ -308,7 +308,6 @@ authors:
         self.assertIn("# Our Amazing Authors", generated_md)
         self.assertIn("## Alice", generated_md)
         self.assertNotIn("this is a string", generated_md)
-
 
     def test_avatar_custom_size_from_page_params(self):
         """
@@ -348,7 +347,6 @@ authors:
         # Expected style for default alignment (center) but custom shape
         self.assertIn('style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%; display: block; margin: 0 auto 10px auto;"', generated_md)
 
-
     def test_avatar_custom_shape_square_from_page_params(self):
         """
         Test that avatars are rendered as squares when 'square' shape is specified in page_params.
@@ -369,7 +367,6 @@ authors:
         # Expected style for default alignment (center) and default shape
         self.assertIn('style="width: 100px; height: 100px; object-fit: cover; border-radius: 0; display: block; margin: 0 auto 10px auto;"', generated_md)
 
-
     def test_avatar_defaults_when_page_params_missing(self):
         """
         Test that avatars use default size, shape, and alignment when page_params are missing or incomplete.
@@ -387,7 +384,6 @@ authors:
         # Expected default style (100px square, centered)
         self.assertIn('style="width: 100px; height: 100px; object-fit: cover; border-radius: 0; display: block; margin: 0 auto 10px auto;"', generated_md)
         self.assertIn('<p style="text-align: center;">', generated_md)
-
 
     def test_avatar_alignment_left(self):
         """
@@ -411,7 +407,6 @@ authors:
         self.assertNotIn('<p style="text-align: center;">', generated_md) # Should not be wrapped in a center paragraph
         self.assertIn('<div style="clear: both;"></div>', generated_md) # Ensure clear is present
 
-
     def test_avatar_alignment_right(self):
         """
         Test avatar aligns right and text wraps around it.
@@ -433,7 +428,6 @@ authors:
         self.assertIn('style="width: 100px; height: 100px; object-fit: cover; border-radius: 0; float: right; margin-left: 15px; margin-bottom: 10px;"', generated_md)
         self.assertNotIn('<p style="text-align: center;">', generated_md) # Should not be wrapped in a center paragraph
         self.assertIn('<div style="clear: both;"></div>', generated_md) # Ensure clear is present
-
 
     def test_on_files_adds_generated_page(self):
         """

@@ -133,6 +133,8 @@ class AuthorsPlugin(BasePlugin):
                     social_links.append(
                         f"[Twitter](https://twitter.com/{author['twitter']})"
                     )
+                if author.get("orcid"):
+                    social_links.append(f"[ORCID](https://orcid.org/{author['orcid']})")
 
                 if social_links:
                     markdown_parts.append(
