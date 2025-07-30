@@ -11,10 +11,10 @@ class AuthorsPlugin(BasePlugin):
     MkDocs plugin to generate an authors page from a YAML file.
     """
 
-    # Define configuration options for the plugin
     config_scheme = (
         ("authors_file", c.Type(str, default=".authors.yml")),
         ("output_page", c.Type(str, default="authors.md")),
+        ("page_params_key", c.Type(str, default="page_params")),
     )
 
     def on_pre_build(self, config):
@@ -22,45 +22,62 @@ class AuthorsPlugin(BasePlugin):
         The 'on_pre_build' event is called once, before the documentation is built.
         This is where we'll generate our authors page content.
         """
-        # Get the path to the authors YAML file, assumes in root of the project (ie one up from docs)
         authors_file_path = os.path.join(
             config["docs_dir"], "..", self.config["authors_file"]
         )
 
         authors_data = []
+        page_parameters = {}
+
         if os.path.exists(authors_file_path):
             with open(authors_file_path, "r", encoding="utf-8") as f:
                 try:
                     raw_data = yaml.safe_load(f)
 
-                    if (
-                        isinstance(raw_data, dict)
-                        and "authors" in raw_data
-                        and isinstance(raw_data["authors"], dict)
-                    ):
-                        for author_id, details in raw_data["authors"].items():
-                            # Add the ID (key from the YAML) into the author's details dictionary
-                            details["id"] = author_id
-                            authors_data.append(details)
+                    if isinstance(raw_data, dict):
+                        if self.config["page_params_key"] in raw_data and isinstance(
+                            raw_data[self.config["page_params_key"]], dict
+                        ):
+                            page_parameters = raw_data[self.config["page_params_key"]]
+
+                        if "authors" in raw_data and isinstance(
+                            raw_data["authors"], dict
+                        ):
+                            for author_id, details in raw_data["authors"].items():
+                                details["id"] = author_id
+                                authors_data.append(details)
+                        else:
+                            print(
+                                f"Warning: '{self.config['authors_file']}' does not contain an 'authors' key at the top level, or it's not a dictionary. No authors will be listed."
+                            )
+                            authors_data = []
                     else:
                         print(
-                            f"Warning: {self.config['authors_file']} should contain a dictionary with an 'authors' key at the top level."
+                            f"Warning: '{self.config['authors_file']}' should contain a dictionary at the top level."
                         )
                         authors_data = []
+                        page_parameters = {}
 
                 except yaml.YAMLError as e:
-                    print(f"Error parsing {self.config['authors_file']}: {e}")
+                    print(f"Error parsing '{self.config['authors_file']}': {e}")
                     authors_data = []
+                    page_parameters = {}
         else:
             print(
                 f"Warning: Authors file not found at {authors_file_path}. No authors page will be generated."
             )
-            # Store an empty string or a warning message if the file is not found
             self.authors_markdown_content = "No authors file found. Please create a '.authors.yml' file in your project root."
             return
 
+        # Get page title and description from parameters, with defaults
+        page_title = page_parameters.get("title", "Our Amazing Authors")
+        page_description = page_parameters.get("description")
+
         # Generate Markdown content for the authors page
-        markdown_content = "# Our Amazing Authors\n\n"
+        markdown_content = f"# {page_title}\n\n"
+        if page_description:
+            markdown_content += f"{page_description}\n\n"
+
         if not authors_data:
             markdown_content += "No authors found or an error occurred while loading the authors data.\n"
         else:
@@ -74,9 +91,6 @@ class AuthorsPlugin(BasePlugin):
                     markdown_content += f"\n {author['description']}\n"
 
                 if author.get("avatar"):
-                    # For avatars, you might need to handle copying them to the site_dir
-                    # or ensure they are served from a public accessible URL.
-                    # For simplicity, this assumes a relative path that MkDocs can handle or an absolute URL.
                     markdown_content += f"\n![{author.get('name', 'Avatar')} Avatar]({author['avatar']})\n"
 
                 if author.get("email"):
@@ -103,10 +117,8 @@ class AuthorsPlugin(BasePlugin):
                         "\n**Connect:** " + " | ".join(social_links) + "\n"
                     )
 
-                markdown_content += "\n---\n\n"  # Separator for each author
+                markdown_content += "\n---\n\n"
 
-        # Store the generated content as an instance variable
-        # This content will be used in on_page_read_source or on_files to create the virtual page.
         self.authors_markdown_content = markdown_content
         print(f"Authors page content generated for '{self.config['output_page']}'.")
 
@@ -117,11 +129,7 @@ class AuthorsPlugin(BasePlugin):
         """
         output_page_name = self.config["output_page"]
 
-        # Check if the file already exists in the files collection to avoid duplicates
-        # This is important if authors.md was already listed in mkdocs.yml nav
         if not any(f.src_path == output_page_name for f in files):
-            # Create a "virtual" file. We'll provide the content in on_page_read_source.
-            # The 'src_path' should be relative to docs_dir, even if it doesn't physically exist there.
             generated_file = File(
                 path=output_page_name,
                 src_dir=config["docs_dir"],
@@ -142,6 +150,5 @@ class AuthorsPlugin(BasePlugin):
             if hasattr(self, "authors_markdown_content"):
                 return self.authors_markdown_content
             else:
-                # Fallback if for some reason content wasn't generated
                 return "Error: Authors page content not available."
-        return None  # Let MkDocs handle other pages normally
+        return None

@@ -1,3 +1,4 @@
+# mkdocs-authors-plugin/tests/test_plugin.py
 import unittest
 import os
 import tempfile
@@ -5,7 +6,7 @@ import shutil
 from mkdocs.config import config_options as c
 from mkdocs.config.base import Config
 from mkdocs.structure.files import File, Files
-from mkdocs.structure.pages import Page  # Import Page
+from mkdocs.structure.pages import Page
 
 # Import the plugin class from your package
 from mkdocs_authors_plugin.plugin import AuthorsPlugin
@@ -18,7 +19,7 @@ class TestAuthorsPlugin(unittest.TestCase):
     This class contains unit tests to verify the functionality of the
     MkDocs AuthorsPlugin, including successful page generation, handling
     of missing or malformed YAML files, and correct file management
-    within MkDocs' build process.
+    within MkDocs' build process, and flexibility for page parameters.
     """
 
     def setUp(self):
@@ -59,7 +60,11 @@ class TestAuthorsPlugin(unittest.TestCase):
 
         self.plugin = AuthorsPlugin()
         self.plugin.load_config(
-            {"authors_file": ".authors.yml", "output_page": "authors.md"}
+            {
+                "authors_file": ".authors.yml",
+                "output_page": "authors.md",
+                "page_params_key": "page_params",
+            }
         )
 
     def tearDown(self):
@@ -141,7 +146,7 @@ authors:
         # Get the generated Markdown content via on_page_read_source simulation
         generated_md = self._get_generated_authors_md_content()
         self.assertIsNotNone(generated_md)
-        self.assertIn("# Our Amazing Authors", generated_md)
+        self.assertIn("# Our Amazing Authors", generated_md)  # Default title
         self.assertIn("## Author One", generated_md)
         self.assertIn("**Affiliation:** British Antarctic Survey", generated_md)
         self.assertIn("Owner", generated_md)
@@ -174,9 +179,7 @@ authors:
         # Do not create .authors.yml
         self.plugin.on_pre_build(self.config)
         generated_md = self._get_generated_authors_md_content()
-        self.assertIsNotNone(
-            generated_md
-        )  # It should return content, even if it's a warning
+        self.assertIsNotNone(generated_md)
         self.assertIn("No authors file found", generated_md)
 
     def test_authors_yml_empty(self):
@@ -236,6 +239,136 @@ contributors:
             generated_md,
         )
 
+    def test_authors_page_generation_with_custom_title(self):
+        """
+        Test that the authors page uses a custom title defined in .authors.yml.
+        """
+        yml_content = """
+page_params:
+  title: Project Contributors
+authors:
+  author_one:
+    name: Custom Author
+        """
+        self._create_authors_yml(yml_content)
+        self.plugin.on_pre_build(self.config)
+        generated_md = self._get_generated_authors_md_content()
+        self.assertIsNotNone(generated_md)
+        self.assertIn("# Project Contributors", generated_md)
+        self.assertIn("## Custom Author", generated_md)
+        self.assertNotIn("# Our Amazing Authors", generated_md)
+
+    def test_authors_page_generation_with_custom_description(self):
+        """
+        Test that the authors page includes a custom description defined in .authors.yml.
+        """
+        yml_content = """
+page_params:
+  title: Our Team
+  description: This is a test description for the authors page.
+authors:
+  author_one:
+    name: Desc Author
+        """
+        self._create_authors_yml(yml_content)
+        self.plugin.on_pre_build(self.config)
+        generated_md = self._get_generated_authors_md_content()
+        self.assertIsNotNone(generated_md)
+        self.assertIn("# Our Team", generated_md)
+        self.assertIn("This is a test description for the authors page.", generated_md)
+        self.assertIn("## Desc Author", generated_md)
+
+    def test_authors_page_generation_without_description(self):
+        """
+        Test that the authors page does not include a description if not defined.
+        """
+        yml_content = """
+page_params:
+  title: No Desc Team
+authors:
+  author_one:
+    name: NoDesc Author
+        """
+        self._create_authors_yml(yml_content)
+        self.plugin.on_pre_build(self.config)
+        generated_md = self._get_generated_authors_md_content()
+        self.assertIsNotNone(generated_md)
+        self.assertIn("# No Desc Team", generated_md)
+        self.assertIn("## NoDesc Author", generated_md)
+        # Check that no empty line or unexpected content is added for description
+        lines = generated_md.splitlines()
+        title_line_index = -1
+        for i, line in enumerate(lines):
+            if line.startswith("# No Desc Team"):
+                title_line_index = i
+                break
+        self.assertGreaterEqual(title_line_index, 0)
+        found_author_heading = False
+        for i in range(title_line_index + 1, len(lines)):
+            if lines[i].strip():  # Find the next non-empty line
+                if lines[i].startswith("## NoDesc Author"):
+                    found_author_heading = True
+                break
+        self.assertTrue(
+            found_author_heading,
+            "Should directly follow title with author heading if no description",
+        )
+
+    def test_authors_page_generation_with_default_title_if_not_specified(self):
+        """
+        Test that the authors page uses the default title if 'page_params' or 'title' is missing.
+        """
+        yml_content = """
+authors:
+  author_one:
+    name: Default Title Author
+        """
+        self._create_authors_yml(yml_content)
+        self.plugin.on_pre_build(self.config)
+        generated_md = self._get_generated_authors_md_content()
+        self.assertIsNotNone(generated_md)
+        self.assertIn("# Our Amazing Authors", generated_md)
+        self.assertIn("## Default Title Author", generated_md)
+        # Ensure no accidental empty description is added if page_params is missing
+        lines = generated_md.splitlines()
+        title_line_index = -1
+        for i, line in enumerate(lines):
+            if line.startswith("# Our Amazing Authors"):
+                title_line_index = i
+                break
+        self.assertGreaterEqual(title_line_index, 0)
+        found_author_heading = False
+        for i in range(title_line_index + 1, len(lines)):
+            if lines[i].strip():  # Find the next non-empty line
+                if lines[i].startswith("## Default Title Author"):
+                    found_author_heading = True
+                break
+        self.assertTrue(
+            found_author_heading,
+            "Should directly follow title with author heading if no description",
+        )
+
+    def test_authors_yml_page_params_not_a_dict(self):
+        """
+        Test handling of .authors.yml where 'page_params' is not a dictionary.
+        """
+        yml_content = """
+page_params: "this is a string"
+authors:
+  author_one:
+    name: Alice
+        """
+        self._create_authors_yml(yml_content)
+        self.plugin.on_pre_build(self.config)
+        generated_md = self._get_generated_authors_md_content()
+        self.assertIsNotNone(generated_md)
+        self.assertIn(
+            "# Our Amazing Authors", generated_md
+        )  # Should fall back to default title
+        self.assertIn("## Alice", generated_md)
+        # Also ensure no description is added from a malformed page_params
+        self.assertNotIn("this is a string", generated_md)
+
     def test_on_files_adds_generated_page(self):
         """
         Test that on_files correctly adds the generated authors.md to MkDocs files.
@@ -269,7 +402,7 @@ authors:
                 authors_md_found = True
                 self.assertEqual(
                     f.abs_src_path, os.path.join(self.docs_dir, "authors.md")
-                )  # It should still point to docs_dir conceptually
+                )
                 break
         self.assertTrue(authors_md_found, "authors.md was not added to MkDocs files.")
         self.assertEqual(len(updated_files), 3)  # Should have 3 files now
