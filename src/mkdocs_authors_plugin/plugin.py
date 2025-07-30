@@ -1,9 +1,9 @@
-# mkdocs-authors-plugin/mkdocs_authors_plugin/plugin.py
 import os
 import yaml
 from mkdocs.plugins import BasePlugin
 from mkdocs.config import config_options as c
 from mkdocs.structure.files import File
+from mkdocs.structure.pages import Page
 
 
 class AuthorsPlugin(BasePlugin):
@@ -27,9 +27,6 @@ class AuthorsPlugin(BasePlugin):
             config["docs_dir"], "..", self.config["authors_file"]
         )
 
-        # Get the path where the output Markdown page should be created
-        output_page_path = os.path.join(config["docs_dir"], self.config["output_page"])
-
         authors_data = []
         if os.path.exists(authors_file_path):
             with open(authors_file_path, "r", encoding="utf-8") as f:
@@ -49,9 +46,7 @@ class AuthorsPlugin(BasePlugin):
                         print(
                             f"Warning: {self.config['authors_file']} should contain a dictionary with an 'authors' key at the top level."
                         )
-                        authors_data = (
-                            []
-                        )  # Ensure it's an empty list if format is incorrect
+                        authors_data = []
 
                 except yaml.YAMLError as e:
                     print(f"Error parsing {self.config['authors_file']}: {e}")
@@ -60,7 +55,9 @@ class AuthorsPlugin(BasePlugin):
             print(
                 f"Warning: Authors file not found at {authors_file_path}. No authors page will be generated."
             )
-            return  # Exit if the authors file doesn't exist
+            # Store an empty string or a warning message if the file is not found
+            self.authors_markdown_content = "No authors file found. Please create a '.authors.yml' file in your project root."
+            return
 
         # Generate Markdown content for the authors page
         markdown_content = "# Our Amazing Authors\n\n"
@@ -77,6 +74,9 @@ class AuthorsPlugin(BasePlugin):
                     markdown_content += f"\n {author['description']}\n"
 
                 if author.get("avatar"):
+                    # For avatars, you might need to handle copying them to the site_dir
+                    # or ensure they are served from a public accessible URL.
+                    # For simplicity, this assumes a relative path that MkDocs can handle or an absolute URL.
                     markdown_content += f"\n![{author.get('name', 'Avatar')} Avatar]({author['avatar']})\n"
 
                 if author.get("email"):
@@ -105,28 +105,23 @@ class AuthorsPlugin(BasePlugin):
 
                 markdown_content += "\n---\n\n"  # Separator for each author
 
-        # Write the generated Markdown content to the output file
-        # Ensure the directory exists
-        os.makedirs(os.path.dirname(output_page_path), exist_ok=True)
-        with open(output_page_path, "w", encoding="utf-8") as f:
-            f.write(markdown_content)
-
-        print(f"Authors page generated at: {output_page_path}")
+        # Store the generated content as an instance variable
+        # This content will be used in on_page_read_source or on_files to create the virtual page.
+        self.authors_markdown_content = markdown_content
+        print(f"Authors page content generated for '{self.config['output_page']}'.")
 
     def on_files(self, files, config):
         """
         The 'on_files' event is called after the files are gathered.
         We need to ensure our generated authors.md file is included in the build.
         """
-        # Get the path where the output Markdown page was created
         output_page_name = self.config["output_page"]
-        output_page_src_path = os.path.join(config["docs_dir"], output_page_name)
 
         # Check if the file already exists in the files collection to avoid duplicates
         # This is important if authors.md was already listed in mkdocs.yml nav
         if not any(f.src_path == output_page_name for f in files):
-            # Create a new File object for our generated page
-            # The 'src_path' should be relative to docs_dir
+            # Create a "virtual" file. We'll provide the content in on_page_read_source.
+            # The 'src_path' should be relative to docs_dir, even if it doesn't physically exist there.
             generated_file = File(
                 path=output_page_name,
                 src_dir=config["docs_dir"],
@@ -136,3 +131,17 @@ class AuthorsPlugin(BasePlugin):
             files.append(generated_file)
             print(f"Added generated '{output_page_name}' to MkDocs files.")
         return files
+
+    def on_page_read_source(self, page, config):
+        """
+        The 'on_page_read_source' event is called when MkDocs reads the source
+        for a page. We'll intercept our generated page and provide its content.
+        """
+        output_page_name = self.config["output_page"]
+        if page.file.src_path == output_page_name:
+            if hasattr(self, "authors_markdown_content"):
+                return self.authors_markdown_content
+            else:
+                # Fallback if for some reason content wasn't generated
+                return "Error: Authors page content not available."
+        return None  # Let MkDocs handle other pages normally

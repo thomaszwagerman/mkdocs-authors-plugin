@@ -9,6 +9,10 @@ A custom MkDocs plugin designed to dynamically generate an "Authors" page for yo
 
 The YAML format is kept consistent with Material's ["Defining authors"](https://squidfunk.github.io/mkdocs-material/tutorials/blogs/navigation/#defining-authors), which enables blog post author attribution.
 
+If you wish to automatically generate authors based on a git repository, [git-authors](https://github.com/timvink/mkdocs-git-authors-plugin) is a tidy plugin to do this. The `authors-plugin` is developed for 
+instances where you want to manually define an authors list, for example for a wider project team,
+non-code contributors etc.  
+
 ## Features
 
 * **Dynamic Page Generation:** Automatically creates an `authors.md` page based on your `.authors.yml` file.
@@ -96,6 +100,15 @@ mkdocs serve
 ```
 
 The plugin will generate the `authors.md` page, and you should see it in your site's navigation.
+
+### Where is authors.md?
+When mkdocs serve detects a file change in `docs/` , it triggers a rebuild. If `authors.md` was
+written into `docs/`, that write itself is a "change," leading to an endless cycle of rebuilding.
+
+To prevent this endless loop, the plugin adds a `File` object representing `authors.md` to MkDocs'
+internal list of files. This tells MkDocs that there is a page called `authors.md` that should be
+part of the documentation build. This mean a physical file does not have to exist at
+`docs/authors.md`.
 
 ## Contributing
 

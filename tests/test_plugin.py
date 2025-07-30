@@ -1,4 +1,3 @@
-# mkdocs-authors-plugin/tests/test_plugin.py
 import unittest
 import os
 import tempfile
@@ -6,6 +5,7 @@ import shutil
 from mkdocs.config import config_options as c
 from mkdocs.config.base import Config
 from mkdocs.structure.files import File, Files
+from mkdocs.structure.pages import Page  # Import Page
 
 # Import the plugin class from your package
 from mkdocs_authors_plugin.plugin import AuthorsPlugin
@@ -86,18 +86,26 @@ class TestAuthorsPlugin(unittest.TestCase):
             f.write(content)
         return authors_yml_path
 
-    def _read_generated_authors_md(self):
+    def _get_generated_authors_md_content(self):
         """
-        Helper function to read the content of the generated authors.md file.
+        Helper function to simulate how MkDocs would get the content of
+        the generated authors.md file by calling on_page_read_source.
 
         Returns:
-            str or None: The content of the authors.md file if it exists, otherwise None.
+            str or None: The content of the authors.md page if generated, otherwise None.
         """
-        generated_path = os.path.join(self.docs_dir, "authors.md")
-        if not os.path.exists(generated_path):
-            return None
-        with open(generated_path, "r", encoding="utf-8") as f:
-            return f.read()
+        # Create a mock File object for authors.md
+        authors_file = File(
+            path="authors.md",
+            src_dir=self.docs_dir,
+            dest_dir=self.site_dir,
+            use_directory_urls=self.config["use_directory_urls"],
+        )
+        # Create a mock Page object using the File
+        authors_page = Page("authors", authors_file, self.config)
+
+        # Call the plugin's on_page_read_source hook
+        return self.plugin.on_page_read_source(authors_page, self.config)
 
     def test_authors_page_generation_success(self):
         """
@@ -127,11 +135,11 @@ authors:
         """
         self._create_authors_yml(yml_content)
 
-        # Simulate on_pre_build hook
+        # Simulate on_pre_build hook to generate content
         self.plugin.on_pre_build(self.config)
 
-        # Read the generated Markdown file
-        generated_md = self._read_generated_authors_md()
+        # Get the generated Markdown content via on_page_read_source simulation
+        generated_md = self._get_generated_authors_md_content()
         self.assertIsNotNone(generated_md)
         self.assertIn("# Our Amazing Authors", generated_md)
         self.assertIn("## Author One", generated_md)
@@ -147,7 +155,9 @@ authors:
         )
         self.assertIn("[Twitter](https://twitter.com/author_one_dev)", generated_md)
         self.assertIn("## Author Two", generated_md)
-        self.assertIn("**Affiliation:** UK Centre for Ecology & Hydrology", generated_md)
+        self.assertIn(
+            "**Affiliation:** UK Centre for Ecology & Hydrology", generated_md
+        )
         self.assertIn("Maintainer", generated_md)
         self.assertNotIn(
             "email", generated_md
@@ -155,28 +165,31 @@ authors:
 
     def test_authors_yml_not_found(self):
         """
-        Test that no authors page is generated if .authors.yml is missing.
+        Test that no authors page content is generated if .authors.yml is missing.
 
         This test verifies the plugin's behavior when the specified
-        .authors.yml file does not exist, ensuring that no output Markdown
-        file is created and a warning is likely issued (though not asserted here).
+        .authors.yml file does not exist, ensuring that the generated content
+        reflects this (e.g., an error message or empty content).
         """
         # Do not create .authors.yml
         self.plugin.on_pre_build(self.config)
-        generated_md = self._read_generated_authors_md()
-        self.assertIsNone(generated_md)  # No file should be generated
+        generated_md = self._get_generated_authors_md_content()
+        self.assertIsNotNone(
+            generated_md
+        )  # It should return content, even if it's a warning
+        self.assertIn("No authors file found", generated_md)
 
     def test_authors_yml_empty(self):
         """
         Test handling of an empty .authors.yml file.
 
         This test ensures that if the .authors.yml file is empty, the plugin
-        still creates the authors.md file but with a message indicating
+        still provides content for the authors.md page but with a message indicating
         no authors were found.
         """
         self._create_authors_yml("")
         self.plugin.on_pre_build(self.config)
-        generated_md = self._read_generated_authors_md()
+        generated_md = self._get_generated_authors_md_content()
         self.assertIsNotNone(generated_md)
         self.assertIn(
             "No authors found or an error occurred while loading the authors data.",
@@ -188,12 +201,12 @@ authors:
         Test handling of a malformed .authors.yml file.
 
         This test verifies that if the .authors.yml file contains invalid YAML
-        syntax, the plugin handles the error gracefully by creating the
-        authors.md file with an appropriate error message.
+        syntax, the plugin handles the error gracefully by providing content
+        for the authors.md page with an appropriate error message.
         """
         self._create_authors_yml("not: valid: yaml")
         self.plugin.on_pre_build(self.config)
-        generated_md = self._read_generated_authors_md()
+        generated_md = self._get_generated_authors_md_content()
         self.assertIsNotNone(generated_md)
         self.assertIn(
             "No authors found or an error occurred while loading the authors data.",
@@ -206,7 +219,7 @@ authors:
 
         This test ensures that if the .authors.yml file has a top-level key
         other than 'authors', the plugin recognizes the incorrect format and
-        generates the authors.md file with a message indicating no valid
+        generates the authors.md page content with a message indicating no valid
         authors data was found.
         """
         yml_content = """
@@ -216,7 +229,7 @@ contributors:
         """
         self._create_authors_yml(yml_content)
         self.plugin.on_pre_build(self.config)
-        generated_md = self._read_generated_authors_md()
+        generated_md = self._get_generated_authors_md_content()
         self.assertIsNotNone(generated_md)
         self.assertIn(
             "No authors found or an error occurred while loading the authors data.",
@@ -228,8 +241,9 @@ contributors:
         Test that on_files correctly adds the generated authors.md to MkDocs files.
 
         This test simulates the 'on_files' hook, verifying that after the
-        authors.md file is generated, it is correctly added to the list of
-        files that MkDocs processes, ensuring it appears in the final build.
+        authors.md file is conceptually "generated" (its content prepared),
+        it is correctly added to the list of files that MkDocs processes,
+        ensuring it appears in the final build.
         """
         yml_content = """
 authors:
@@ -237,7 +251,7 @@ authors:
     name: Author One
         """
         self._create_authors_yml(yml_content)
-        self.plugin.on_pre_build(self.config)  # Generate the file first
+        self.plugin.on_pre_build(self.config)  # Prepare the content
 
         initial_files = Files(
             [
@@ -253,6 +267,9 @@ authors:
         for f in updated_files:
             if f.src_path == "authors.md":
                 authors_md_found = True
+                self.assertEqual(
+                    f.abs_src_path, os.path.join(self.docs_dir, "authors.md")
+                )  # It should still point to docs_dir conceptually
                 break
         self.assertTrue(authors_md_found, "authors.md was not added to MkDocs files.")
         self.assertEqual(len(updated_files), 3)  # Should have 3 files now
@@ -272,7 +289,7 @@ authors:
     name: Author One
         """
         self._create_authors_yml(yml_content)
-        self.plugin.on_pre_build(self.config)  # Generate the file first
+        self.plugin.on_pre_build(self.config)  # Prepare the content
 
         # Simulate authors.md already being in the initial files list
         initial_files = Files(
