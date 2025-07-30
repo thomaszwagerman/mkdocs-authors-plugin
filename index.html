@@ -466,6 +466,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#other-plugins" class="md-nav__link">
+    <span class="md-ellipsis">
+      Other plugins
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#contributing" class="md-nav__link">
     <span class="md-ellipsis">
       Contributing
@@ -582,10 +591,9 @@
 <a href="https://codecov.io/gh/thomaszwagerman/mkdocs-authors-plugin"><img alt="codecov" src="https://codecov.io/gh/thomaszwagerman/mkdocs-authors-plugin/graph/badge.svg?token=Q6FAWKRJMK" /></a>
 <img alt="GitHub License" src="https://img.shields.io/github/license/thomaszwagerman/mkdocs-authors-plugin" /></p>
 <p>A custom MkDocs plugin designed to dynamically generate an "Authors" page for your documentation site from a simple YAML file. This allows you to easily manage and display information about contributors without manually updating Markdown files.</p>
-<p>The YAML format is kept consistent with Material's <a href="https://squidfunk.github.io/mkdocs-material/tutorials/blogs/navigation/#defining-authors">"Defining authors"</a>, which enables blog post author attribution.</p>
-<p>If you wish to automatically generate authors based on a git repository, <a href="https://github.com/timvink/mkdocs-git-authors-plugin">git-authors</a> is a tidy plugin to do this.</p>
-<p>The <code>authors-plugin</code> is developed for instances where you want to manually define an authors list,
-for example for a wider project team, or non-code contributors.  </p>
+<p>The YAML format is kept consistent with Material's <a href="https://squidfunk.github.io/mkdocs-material/tutorials/blogs/navigation/#defining-authors">"Defining authors"</a>, which enables blog post author attribution. This means that if you are
+creating a blog you will not have to define <code>.authors.yml</code> twice. Note that <code>authors</code> can be used
+independently (without a blog) as well.</p>
 <h2 id="features">Features</h2>
 <ul>
 <li>
@@ -676,6 +684,10 @@ written into <code>docs/</code>, that write itself is a "change," leading to an 
 internal list of files. This tells MkDocs that there is a page called <code>authors.md</code> that should be
 part of the documentation build. This mean a physical file does not have to exist at
 <code>docs/authors.md</code>.</p>
+<h2 id="other-plugins">Other plugins</h2>
+<p>If you wish to automatically generate authors based on a git repository, <a href="https://github.com/timvink/mkdocs-git-authors-plugin">git-authors</a> is a tidy plugin to do this.</p>
+<p>The <code>authors-plugin</code> is developed for instances where you want to manually define an authors list,
+for example for a wider project team, or non-code contributors.  </p>
 <h2 id="contributing">Contributing</h2>
 <p>Contributions are welcome! If you find a bug or have a feature request, please open an issue or submit a pull request on the <a href="https://github.com/thomaszwagerman/mkdocs-authors-plugin">GitHub repository</a>.</p>
 <h2 id="license">License</h2>
