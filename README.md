@@ -41,7 +41,7 @@ pip install -e .
 
 ### 1. Configure `mkdocs.yml`
 
-Add the `authors_plugin` to your `plugins` list in your `mkdocs.yml` file. You also need to include the `authors.md` page in your `nav` section.
+Add the `authors` plugin to your `plugins` list in your `mkdocs.yml` file. You also need to include the `authors.md` page in your `nav` section.
 
 ```yml
 # mkdocs.yml
@@ -49,7 +49,7 @@ site_name: My Awesome Docs
 
 plugins:
   - search
-  - authors_plugin:
+  - authors:
       # Optional: specify the authors file if it's not .authors.yml
       # authors_file: my_custom_authors.yaml
       # Optional: specify the output page name if it's not authors.md

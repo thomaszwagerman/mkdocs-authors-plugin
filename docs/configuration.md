@@ -8,7 +8,7 @@ To configure the plugin, add it under the `plugins` section and provide the desi
 # mkdocs.yml
 plugins:
   - search
-  - authors_plugin:
+  - authors:
       authors_file: custom_authors.yaml  # Optional: Default is '.authors.yml'
       output_page: team_members.md      # Optional: Default is 'authors.md'
 ```

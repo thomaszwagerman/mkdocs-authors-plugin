@@ -52,7 +52,7 @@ docs = [
 ]
 
 [project.entry-points."mkdocs.plugins"]
-authors_plugin = "mkdocs_authors_plugin.plugin:AuthorsPlugin"
+authors = "mkdocs_authors_plugin.plugin:AuthorsPlugin"
 
 [tool.setuptools]
 package-dir = {"" = "src"}

@@ -36,7 +36,7 @@ nav:
 
 plugins:
   - search
-  - authors_plugin
+  - authors
 
 markdown_extensions:
   - admonition
