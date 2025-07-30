@@ -1,9 +1,12 @@
 import os
 import yaml
-from mkdocs.plugins import BasePlugin
+from mkdocs.plugins import BasePlugin, get_plugin_logger
 from mkdocs.config import config_options as c
 from mkdocs.structure.files import File
 from mkdocs.structure.pages import Page
+
+
+log = get_plugin_logger(__name__)
 
 
 class AuthorsPlugin(BasePlugin):
@@ -47,33 +50,31 @@ class AuthorsPlugin(BasePlugin):
                                 details["id"] = author_id
                                 authors_data.append(details)
                         else:
-                            print(
-                                f"Warning: '{self.config['authors_file']}' does not contain an 'authors' key at the top level, or it's not a dictionary. No authors will be listed."
+                            log.warning(
+                                f"'{self.config['authors_file']}' does not contain an 'authors' key at the top level, or it's not a dictionary. No authors will be listed."
                             )
                             authors_data = []
                     else:
-                        print(
-                            f"Warning: '{self.config['authors_file']}' should contain a dictionary at the top level."
+                        log.warning(
+                            f"'{self.config['authors_file']}' should contain a dictionary at the top level. No authors or page parameters will be loaded."
                         )
                         authors_data = []
                         page_parameters = {}
 
                 except yaml.YAMLError as e:
-                    print(f"Error parsing '{self.config['authors_file']}': {e}")
+                    log.error(f"Error parsing '{self.config['authors_file']}': {e}")
                     authors_data = []
                     page_parameters = {}
         else:
-            print(
-                f"Warning: Authors file not found at {authors_file_path}. No authors page will be generated."
+            log.warning(
+                f"Authors file not found at '{authors_file_path}'. No authors page will be generated."
             )
             self.authors_markdown_content = "No authors file found. Please create a '.authors.yml' file in your project root."
             return
 
-        # Get page title and description from parameters, with defaults
         page_title = page_parameters.get("title", "Our Amazing Authors")
         page_description = page_parameters.get("description")
 
-        # Generate Markdown content for the authors page
         markdown_content = f"# {page_title}\n\n"
         if page_description:
             markdown_content += f"{page_description}\n\n"
@@ -120,7 +121,7 @@ class AuthorsPlugin(BasePlugin):
                 markdown_content += "\n---\n\n"
 
         self.authors_markdown_content = markdown_content
-        print(f"Authors page content generated for '{self.config['output_page']}'.")
+        log.info(f"Authors page content generated for '{self.config['output_page']}'.")
 
     def on_files(self, files, config):
         """
@@ -137,7 +138,7 @@ class AuthorsPlugin(BasePlugin):
                 use_directory_urls=config["use_directory_urls"],
             )
             files.append(generated_file)
-            print(f"Added generated '{output_page_name}' to MkDocs files.")
+            log.info(f"Added generated '{output_page_name}' to MkDocs files.")
         return files
 
     def on_page_read_source(self, page, config):
@@ -150,5 +151,8 @@ class AuthorsPlugin(BasePlugin):
             if hasattr(self, "authors_markdown_content"):
                 return self.authors_markdown_content
             else:
+                log.error(
+                    "Authors page content not available when 'on_page_read_source' was called."
+                )
                 return "Error: Authors page content not available."
         return None

@@ -9,9 +9,10 @@ A custom MkDocs plugin designed to dynamically generate an "Authors" page for yo
 
 The YAML format is kept consistent with Material's ["Defining authors"](https://squidfunk.github.io/mkdocs-material/tutorials/blogs/navigation/#defining-authors), which enables blog post author attribution.
 
-If you wish to automatically generate authors based on a git repository, [git-authors](https://github.com/timvink/mkdocs-git-authors-plugin) is a tidy plugin to do this. The `authors-plugin` is developed for 
-instances where you want to manually define an authors list, for example for a wider project team,
-non-code contributors etc.  
+If you wish to automatically generate authors based on a git repository, [git-authors](https://github.com/timvink/mkdocs-git-authors-plugin) is a tidy plugin to do this.
+
+The `authors-plugin` is developed for instances where you want to manually define an authors list,
+for example for a wider project team, or non-code contributors.  
 
 ## Features
 
@@ -19,7 +20,7 @@ non-code contributors etc.
 
 * **Configurable Paths:** Easily customize the input YAML file name and the output Markdown page name.
 
-* **Rich Author Profiles:** Supports fields for name, ID, description, avatar, affiliation, email, GitHub, LinkedIn, and Twitter links.
+* **Author Profiles:** Supports fields for name, description, avatar, affiliation, email, and social media links.
 
 ## Installation
 
@@ -66,8 +67,18 @@ Create an `.authors.yml` file in the root directory of your MkDocs documentation
 
 The plugin expects a top-level `authors` key, under which each author is defined by a unique ID (e.g., `author_one`).
 
+You can also define optional page parameters under `page_params`, such as an overall title and 
+description.
+
 ```yml
 # .authors.yml
+
+# Optional: Define page-level parameters for the generated authors page
+page_params:
+  title: Our Project Team
+  description: "Meet the team."
+
+# Required: Define individual author data
 authors:
   author_one:
     name: Author One
