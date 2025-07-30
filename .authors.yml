@@ -1,6 +1,7 @@
 page_params:
   title: Our Incredible Team!
   description: "Meet the team."
+  avatar_shape: circle
 
 authors:
   author_one:

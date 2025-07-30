@@ -8,16 +8,19 @@ The YAML can contain two top-level keys named `page_params` (optional) and `auth
 The `page_params` key is an optional top-level dictionary that lets you configure characteristics
 of the generated authors page itself, such as its main title and an introductory description.
 
+| Field         | Type     | Description                                                          | Default   | Example Value                     |
+| :------------ | :------- | :------------------------------------------------------------------- | :-------- | :-------------------------------- |
+| `title`       | `string` | The main title of the generated authors page.                        | `Our Amazing Authors` | `Project Contributors`            |
+| `description` | `string` | An introductory paragraph displayed directly under the main title.   | `None`    | `Meet the team members.` |
+| `avatar_size` | `integer`| Sets the uniform width and height for all author avatars in pixels.  | `100`     | `120`                             |
+| `avatar_shape`| `string` | Controls the shape of the avatars. Can be `square` or `circle`.      | `square`  | `circle`                          |
+
 ## Author Data
 
 The `authors` key is a required top-level dictionary which holds individual author entries.
+
 Each author entry is identified by a unique key (e.g., `author_one`, `author_two`), which the plugin
 uses as the author's ID.
-
-| Field         | Type     | Description                                                          | Example Value                     |
-| :------------ | :------- | :------------------------------------------------------------------- | :-------------------------------- |
-| `title`       | `string` | The main title of the generated authors page. Defaults to `Our Amazing Authors`. | `Project Contributors`            |
-| `description` | `string` | An introductory paragraph displayed directly under the main title.   | `Meet our team members.` |
 
 Under each author ID, you can define various fields to describe the author.
 The plugin will render these fields on the generated authors page.
@@ -42,7 +45,8 @@ The plugin will render these fields on the generated authors page.
 page_params:
   title: Our Project Team
   description: "Meet the people behind our project."
-
+  avatar_size: 150           
+  avatar_shape: circle       
 
 # Required: Define individual author data
 authors:

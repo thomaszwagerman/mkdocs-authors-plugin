@@ -77,6 +77,8 @@ description.
 page_params:
   title: Our Project Team
   description: "Meet the team."
+  avatar_size: 150           
+  avatar_shape: circle      
 
 # Required: Define individual author data
 authors:

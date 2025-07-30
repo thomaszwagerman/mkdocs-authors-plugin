@@ -75,6 +75,14 @@ class AuthorsPlugin(BasePlugin):
         page_title = page_parameters.get("title", "Our Amazing Authors")
         page_description = page_parameters.get("description")
 
+        # Get avatar styling from page_parameters, with defaults
+        avatar_size = page_parameters.get(
+            "avatar_size", 100
+        )  # Default if not specified in page_params
+        avatar_shape = page_parameters.get(
+            "avatar_shape", "square"
+        )  # Default if not specified in page_params
+
         markdown_content = f"# {page_title}\n\n"
         if page_description:
             markdown_content += f"{page_description}\n\n"
@@ -85,14 +93,25 @@ class AuthorsPlugin(BasePlugin):
             for author in authors_data:
                 markdown_content += f"## {author.get('name', 'Unknown Author')}\n"
 
+                if author.get("avatar"):
+                    avatar_url = author["avatar"]
+                    author_name = author.get("name", "Avatar")
+
+                    style_attributes = f"width: {avatar_size}px; height: {avatar_size}px; object-fit: cover;"
+                    if avatar_shape == "circle":
+                        style_attributes += " border-radius: 50%;"
+                    else:  # Default or 'square'
+                        style_attributes += " border-radius: 0;"
+
+                    style_attributes += " display: block; margin: 0 auto;"
+
+                    markdown_content += f'\n<p style="text-align: center;"><img src="{avatar_url}" alt="{author_name} Avatar" style="{style_attributes}"></p>\n'
+
                 if author.get("affiliation"):
                     markdown_content += f"**Affiliation:** {author['affiliation']}\n"
 
                 if author.get("description"):
                     markdown_content += f"\n {author['description']}\n"
-
-                if author.get("avatar"):
-                    markdown_content += f"\n![{author.get('name', 'Avatar')} Avatar]({author['avatar']})\n"
 
                 if author.get("email"):
                     markdown_content += (

@@ -1,4 +1,3 @@
-# mkdocs-authors-plugin/tests/test_plugin.py
 import unittest
 import os
 import tempfile
@@ -15,21 +14,11 @@ from mkdocs_authors_plugin.plugin import AuthorsPlugin
 class TestAuthorsPlugin(unittest.TestCase):
     """
     Test suite for the AuthorsPlugin.
-
-    This class contains unit tests to verify the functionality of the
-    MkDocs AuthorsPlugin, including successful page generation, handling
-    of missing or malformed YAML files, and correct file management
-    within MkDocs' build process, and flexibility for page parameters.
     """
 
     def setUp(self):
         """
         Set up a temporary directory and mock MkDocs environment for each test.
-
-        This method creates a temporary directory structure mimicking an MkDocs
-        project (with 'docs' and 'site' directories) and initializes a mock
-        MkDocs Config object. It also instantiates the AuthorsPlugin and
-        loads its configuration.
         """
         self.tmp_dir = tempfile.mkdtemp()
         self.docs_dir = os.path.join(self.tmp_dir, "docs")
@@ -70,21 +59,12 @@ class TestAuthorsPlugin(unittest.TestCase):
     def tearDown(self):
         """
         Clean up the temporary directory after each test.
-
-        This method removes the temporary directory and all its contents
-        created during the test setup, ensuring a clean state for subsequent tests.
         """
         shutil.rmtree(self.tmp_dir)
 
     def _create_authors_yml(self, content):
         """
         Helper function to create the .authors.yml file with given content.
-
-        Args:
-            content (str): The YAML content to write to the .authors.yml file.
-
-        Returns:
-            str: The full path to the created .authors.yml file.
         """
         authors_yml_path = os.path.join(self.tmp_dir, ".authors.yml")
         with open(authors_yml_path, "w", encoding="utf-8") as f:
@@ -95,31 +75,20 @@ class TestAuthorsPlugin(unittest.TestCase):
         """
         Helper function to simulate how MkDocs would get the content of
         the generated authors.md file by calling on_page_read_source.
-
-        Returns:
-            str or None: The content of the authors.md page if generated, otherwise None.
         """
-        # Create a mock File object for authors.md
         authors_file = File(
             path="authors.md",
             src_dir=self.docs_dir,
             dest_dir=self.site_dir,
             use_directory_urls=self.config["use_directory_urls"],
         )
-        # Create a mock Page object using the File
         authors_page = Page("authors", authors_file, self.config)
-
-        # Call the plugin's on_page_read_source hook
         return self.plugin.on_page_read_source(authors_page, self.config)
 
     def test_authors_page_generation_success(self):
         """
         Test that the authors page is generated correctly with valid data.
-
-        This test simulates a successful scenario where a well-formed
-        .authors.yml file is provided, and verifies that the plugin
-        generates the authors.md file with the expected Markdown content,
-        including all specified author details and formatting.
+        Verifies default avatar size and shape.
         """
         yml_content = """
 authors:
@@ -140,14 +109,20 @@ authors:
         """
         self._create_authors_yml(yml_content)
 
-        # Simulate on_pre_build hook to generate content
         self.plugin.on_pre_build(self.config)
 
-        # Get the generated Markdown content via on_page_read_source simulation
         generated_md = self._get_generated_authors_md_content()
         self.assertIsNotNone(generated_md)
-        self.assertIn("# Our Amazing Authors", generated_md)  # Default title
+        self.assertIn("# Our Amazing Authors", generated_md)
         self.assertIn("## Author One", generated_md)
+        self.assertIn(
+            '<img src="headshot_one.png" alt="Author One Avatar"', generated_md
+        )
+        # Verify default avatar styles (100px square)
+        self.assertIn(
+            'style="width: 100px; height: 100px; object-fit: cover; border-radius: 0; display: block; margin: 0 auto;"',
+            generated_md,
+        )
         self.assertIn("**Affiliation:** British Antarctic Survey", generated_md)
         self.assertIn("Owner", generated_md)
         self.assertIn(
@@ -161,22 +136,23 @@ authors:
         self.assertIn("[Twitter](https://twitter.com/author_one_dev)", generated_md)
         self.assertIn("## Author Two", generated_md)
         self.assertIn(
+            '<img src="headshot_two.png" alt="Author Two Avatar"', generated_md
+        )
+        # Verify default avatar styles (100px square)
+        self.assertIn(
+            'style="width: 100px; height: 100px; object-fit: cover; border-radius: 0; display: block; margin: 0 auto;"',
+            generated_md,
+        )
+        self.assertIn(
             "**Affiliation:** UK Centre for Ecology & Hydrology", generated_md
         )
         self.assertIn("Maintainer", generated_md)
-        self.assertNotIn(
-            "email", generated_md
-        )  # Author Two has no email in this test data
+        self.assertNotIn("email", generated_md)
 
     def test_authors_yml_not_found(self):
         """
         Test that no authors page content is generated if .authors.yml is missing.
-
-        This test verifies the plugin's behavior when the specified
-        .authors.yml file does not exist, ensuring that the generated content
-        reflects this (e.g., an error message or empty content).
         """
-        # Do not create .authors.yml
         self.plugin.on_pre_build(self.config)
         generated_md = self._get_generated_authors_md_content()
         self.assertIsNotNone(generated_md)
@@ -185,10 +161,6 @@ authors:
     def test_authors_yml_empty(self):
         """
         Test handling of an empty .authors.yml file.
-
-        This test ensures that if the .authors.yml file is empty, the plugin
-        still provides content for the authors.md page but with a message indicating
-        no authors were found.
         """
         self._create_authors_yml("")
         self.plugin.on_pre_build(self.config)
@@ -202,10 +174,6 @@ authors:
     def test_authors_yml_malformed(self):
         """
         Test handling of a malformed .authors.yml file.
-
-        This test verifies that if the .authors.yml file contains invalid YAML
-        syntax, the plugin handles the error gracefully by providing content
-        for the authors.md page with an appropriate error message.
         """
         self._create_authors_yml("not: valid: yaml")
         self.plugin.on_pre_build(self.config)
@@ -219,11 +187,6 @@ authors:
     def test_authors_yml_wrong_top_level_key(self):
         """
         Test handling of .authors.yml with an incorrect top-level key.
-
-        This test ensures that if the .authors.yml file has a top-level key
-        other than 'authors', the plugin recognizes the incorrect format and
-        generates the authors.md page content with a message indicating no valid
-        authors data was found.
         """
         yml_content = """
 contributors:
@@ -295,7 +258,6 @@ authors:
         self.assertIsNotNone(generated_md)
         self.assertIn("# No Desc Team", generated_md)
         self.assertIn("## NoDesc Author", generated_md)
-        # Check that no empty line or unexpected content is added for description
         lines = generated_md.splitlines()
         title_line_index = -1
         for i, line in enumerate(lines):
@@ -305,7 +267,7 @@ authors:
         self.assertGreaterEqual(title_line_index, 0)
         found_author_heading = False
         for i in range(title_line_index + 1, len(lines)):
-            if lines[i].strip():  # Find the next non-empty line
+            if lines[i].strip():
                 if lines[i].startswith("## NoDesc Author"):
                     found_author_heading = True
                 break
@@ -329,7 +291,6 @@ authors:
         self.assertIsNotNone(generated_md)
         self.assertIn("# Our Amazing Authors", generated_md)
         self.assertIn("## Default Title Author", generated_md)
-        # Ensure no accidental empty description is added if page_params is missing
         lines = generated_md.splitlines()
         title_line_index = -1
         for i, line in enumerate(lines):
@@ -339,7 +300,7 @@ authors:
         self.assertGreaterEqual(title_line_index, 0)
         found_author_heading = False
         for i in range(title_line_index + 1, len(lines)):
-            if lines[i].strip():  # Find the next non-empty line
+            if lines[i].strip():
                 if lines[i].startswith("## Default Title Author"):
                     found_author_heading = True
                 break
@@ -362,21 +323,96 @@ authors:
         self.plugin.on_pre_build(self.config)
         generated_md = self._get_generated_authors_md_content()
         self.assertIsNotNone(generated_md)
-        self.assertIn(
-            "# Our Amazing Authors", generated_md
-        )  # Should fall back to default title
+        self.assertIn("# Our Amazing Authors", generated_md)
         self.assertIn("## Alice", generated_md)
-        # Also ensure no description is added from a malformed page_params
         self.assertNotIn("this is a string", generated_md)
+
+    def test_avatar_custom_size_from_page_params(self):
+        """
+        Test that avatars are rendered with a custom size defined in page_params.
+        """
+        yml_content = """
+page_params:
+  avatar_size: 150
+authors:
+  author_one:
+    name: Sized Author
+    avatar: path/to/avatar.png
+        """
+        self._create_authors_yml(yml_content)
+        self.plugin.on_pre_build(self.config)
+        generated_md = self._get_generated_authors_md_content()
+        self.assertIsNotNone(generated_md)
+        self.assertIn(
+            'style="width: 150px; height: 150px; object-fit: cover; border-radius: 0; display: block; margin: 0 auto;"',
+            generated_md,
+        )
+
+    def test_avatar_custom_shape_circle_from_page_params(self):
+        """
+        Test that avatars are rendered as circles when 'circle' shape is specified in page_params.
+        """
+        yml_content = """
+page_params:
+  avatar_shape: circle
+authors:
+  author_one:
+    name: Circular Author
+    avatar: path/to/avatar.png
+        """
+        self._create_authors_yml(yml_content)
+        self.plugin.on_pre_build(self.config)
+        generated_md = self._get_generated_authors_md_content()
+        self.assertIsNotNone(generated_md)
+        self.assertIn(
+            'style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%; display: block; margin: 0 auto;"',
+            generated_md,
+        )
+
+    def test_avatar_custom_shape_square_from_page_params(self):
+        """
+        Test that avatars are rendered as squares when 'square' shape is specified in page_params.
+        (even though it's default, explicitly test it)
+        """
+        yml_content = """
+page_params:
+  avatar_shape: square
+authors:
+  author_one:
+    name: Square Author
+    avatar: path/to/avatar.png
+        """
+        self._create_authors_yml(yml_content)
+        self.plugin.on_pre_build(self.config)
+        generated_md = self._get_generated_authors_md_content()
+        self.assertIsNotNone(generated_md)
+        self.assertIn(
+            'style="width: 100px; height: 100px; object-fit: cover; border-radius: 0; display: block; margin: 0 auto;"',
+            generated_md,
+        )
+
+    def test_avatar_defaults_when_page_params_missing(self):
+        """
+        Test that avatars use default size and shape when page_params are missing or incomplete.
+        """
+        yml_content = """
+authors:
+  author_one:
+    name: Default Avatar Author
+    avatar: path/to/avatar.png
+        """
+        self._create_authors_yml(yml_content)
+        self.plugin.on_pre_build(self.config)
+        generated_md = self._get_generated_authors_md_content()
+        self.assertIsNotNone(generated_md)
+        self.assertIn(
+            'style="width: 100px; height: 100px; object-fit: cover; border-radius: 0; display: block; margin: 0 auto;"',
+            generated_md,
+        )
 
     def test_on_files_adds_generated_page(self):
         """
         Test that on_files correctly adds the generated authors.md to MkDocs files.
-
-        This test simulates the 'on_files' hook, verifying that after the
-        authors.md file is conceptually "generated" (its content prepared),
-        it is correctly added to the list of files that MkDocs processes,
-        ensuring it appears in the final build.
         """
         yml_content = """
 authors:
@@ -384,7 +420,7 @@ authors:
     name: Author One
         """
         self._create_authors_yml(yml_content)
-        self.plugin.on_pre_build(self.config)  # Prepare the content
+        self.plugin.on_pre_build(self.config)
 
         initial_files = Files(
             [
@@ -395,7 +431,6 @@ authors:
 
         updated_files = self.plugin.on_files(initial_files, self.config)
 
-        # Check if authors.md is now in the files list
         authors_md_found = False
         for f in updated_files:
             if f.src_path == "authors.md":
@@ -405,16 +440,11 @@ authors:
                 )
                 break
         self.assertTrue(authors_md_found, "authors.md was not added to MkDocs files.")
-        self.assertEqual(len(updated_files), 3)  # Should have 3 files now
+        self.assertEqual(len(updated_files), 3)
 
     def test_on_files_does_not_duplicate_generated_page(self):
         """
         Test that on_files does not add a duplicate if authors.md is already present.
-
-        This test ensures that if an 'authors.md' file is already present
-        in the MkDocs file list (e.g., if it was manually added to `nav`
-        before generation), the 'on_files' hook does not add a duplicate
-        entry.
         """
         yml_content = """
 authors:
@@ -422,20 +452,17 @@ authors:
     name: Author One
         """
         self._create_authors_yml(yml_content)
-        self.plugin.on_pre_build(self.config)  # Prepare the content
+        self.plugin.on_pre_build(self.config)
 
-        # Simulate authors.md already being in the initial files list
         initial_files = Files(
             [
                 File("index.md", self.docs_dir, self.site_dir, True),
                 File("about.md", self.docs_dir, self.site_dir, True),
-                File("authors.md", self.docs_dir, self.site_dir, True),  # Already here
+                File("authors.md", self.docs_dir, self.site_dir, True),
             ]
         )
 
         updated_files = self.plugin.on_files(initial_files, self.config)
-
-        # Check that it's still 3 files, not 4
         self.assertEqual(len(updated_files), 3)
 
 
