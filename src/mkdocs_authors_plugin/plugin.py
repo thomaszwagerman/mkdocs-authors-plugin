@@ -76,12 +76,11 @@ class AuthorsPlugin(BasePlugin):
         page_description = page_parameters.get("description")
 
         # Get avatar styling from page_parameters, with defaults
-        avatar_size = page_parameters.get(
-            "avatar_size", 100
-        )  # Default if not specified in page_params
-        avatar_shape = page_parameters.get(
-            "avatar_shape", "square"
-        )  # Default if not specified in page_params
+        avatar_size = page_parameters.get("avatar_size", 100)
+        avatar_shape = page_parameters.get("avatar_shape", "square")
+        avatar_align = page_parameters.get(
+            "avatar_align", "center"
+        )  # Default to 'center'
 
         markdown_content = f"# {page_title}\n\n"
         if page_description:
@@ -93,6 +92,7 @@ class AuthorsPlugin(BasePlugin):
             for author in authors_data:
                 markdown_content += f"## {author.get('name', 'Unknown Author')}\n"
 
+                avatar_html = ""  # Initialize avatar HTML for conditional placement
                 if author.get("avatar"):
                     avatar_url = author["avatar"]
                     author_name = author.get("name", "Avatar")
@@ -103,10 +103,25 @@ class AuthorsPlugin(BasePlugin):
                     else:  # Default or 'square'
                         style_attributes += " border-radius: 0;"
 
-                    style_attributes += " display: block; margin: 0 auto;"
+                    if avatar_align == "left":
+                        style_attributes += (
+                            " float: left; margin-right: 15px; margin-bottom: 10px;"
+                        )
+                        avatar_html = f'<img src="{avatar_url}" alt="{author_name} Avatar" style="{style_attributes}">'
+                    elif avatar_align == "right":
+                        style_attributes += (
+                            " float: right; margin-left: 15px; margin-bottom: 10px;"
+                        )
+                        avatar_html = f'<img src="{avatar_url}" alt="{author_name} Avatar" style="{style_attributes}">'
+                    else:  # 'center' or default
+                        style_attributes += " display: block; margin: 0 auto 10px auto;"  # Add bottom margin for spacing
+                        # For center, wrap in a paragraph for block-level centering
+                        avatar_html = f'<p style="text-align: center;"><img src="{avatar_url}" alt="{author_name} Avatar" style="{style_attributes}"></p>'
 
-                    markdown_content += f'\n<p style="text-align: center;"><img src="{avatar_url}" alt="{author_name} Avatar" style="{style_attributes}"></p>\n'
+                # Insert avatar HTML
+                markdown_content += avatar_html
 
+                # Now add the textual details that might wrap around a floated image
                 if author.get("affiliation"):
                     markdown_content += f"**Affiliation:** {author['affiliation']}\n"
 
@@ -136,6 +151,10 @@ class AuthorsPlugin(BasePlugin):
                     markdown_content += (
                         "\n**Connect:** " + " | ".join(social_links) + "\n"
                     )
+
+                # Clear float after each author block if avatar was floated
+                if avatar_align in ["left", "right"]:
+                    markdown_content += '<div style="clear: both;"></div>\n'
 
                 markdown_content += "\n---\n\n"
 

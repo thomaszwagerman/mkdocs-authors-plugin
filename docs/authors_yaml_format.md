@@ -11,9 +11,10 @@ of the generated authors page itself, such as its main title and an introductory
 | Field         | Type     | Description                                                          | Default   | Example Value                     |
 | :------------ | :------- | :------------------------------------------------------------------- | :-------- | :-------------------------------- |
 | `title`       | `string` | The main title of the generated authors page.                        | `Our Amazing Authors` | `Project Contributors`            |
-| `description` | `string` | An introductory paragraph displayed directly under the main title.   | `None`    | `Meet the team members.` |
+| `description` | `string` | An introductory paragraph displayed directly under the main title.   | `None`    | `Meet our dedicated team members.` |
 | `avatar_size` | `integer`| Sets the uniform width and height for all author avatars in pixels.  | `100`     | `120`                             |
 | `avatar_shape`| `string` | Controls the shape of the avatars. Can be `square` or `circle`.      | `square`  | `circle`                          |
+| `avatar_align`| `string` | Controls the horizontal alignment of avatars. `left` and `right` will make text wrap around the avatar. `center` will place the avatar on its own line, horizontally centered. | `center`  | `left`                            |                     |
 
 ## Author Data
 
@@ -45,8 +46,9 @@ The plugin will render these fields on the generated authors page.
 page_params:
   title: Our Project Team
   description: "Meet the people behind our project."
-  avatar_size: 150           
-  avatar_shape: circle       
+  avatar_size: 100
+  avatar_shape: circle
+  avatar_align: left 
 
 # Required: Define individual author data
 authors:

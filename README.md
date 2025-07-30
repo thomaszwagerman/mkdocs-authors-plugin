@@ -79,6 +79,7 @@ page_params:
   description: "Meet the team."
   avatar_size: 150           
   avatar_shape: circle      
+  avatar_align: left
 
 # Required: Define individual author data
 authors:

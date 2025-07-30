@@ -49,11 +49,7 @@ class TestAuthorsPlugin(unittest.TestCase):
 
         self.plugin = AuthorsPlugin()
         self.plugin.load_config(
-            {
-                "authors_file": ".authors.yml",
-                "output_page": "authors.md",
-                "page_params_key": "page_params",
-            }
+            {"authors_file": ".authors.yml", "output_page": "authors.md", "page_params_key": "page_params"}
         )
 
     def tearDown(self):
@@ -88,7 +84,7 @@ class TestAuthorsPlugin(unittest.TestCase):
     def test_authors_page_generation_success(self):
         """
         Test that the authors page is generated correctly with valid data.
-        Verifies default avatar size and shape.
+        Verifies default avatar size and shape (100px square, centered).
         """
         yml_content = """
 authors:
@@ -115,14 +111,10 @@ authors:
         self.assertIsNotNone(generated_md)
         self.assertIn("# Our Amazing Authors", generated_md)
         self.assertIn("## Author One", generated_md)
-        self.assertIn(
-            '<img src="headshot_one.png" alt="Author One Avatar"', generated_md
-        )
-        # Verify default avatar styles (100px square)
-        self.assertIn(
-            'style="width: 100px; height: 100px; object-fit: cover; border-radius: 0; display: block; margin: 0 auto;"',
-            generated_md,
-        )
+        self.assertIn('<img src="headshot_one.png" alt="Author One Avatar"', generated_md)
+        # Verify default avatar styles (100px square, centered)
+        self.assertIn('style="width: 100px; height: 100px; object-fit: cover; border-radius: 0; display: block; margin: 0 auto 10px auto;"', generated_md)
+        self.assertIn('<p style="text-align: center;">', generated_md) # Check for the wrapper paragraph
         self.assertIn("**Affiliation:** British Antarctic Survey", generated_md)
         self.assertIn("Owner", generated_md)
         self.assertIn(
@@ -135,17 +127,11 @@ authors:
         )
         self.assertIn("[Twitter](https://twitter.com/author_one_dev)", generated_md)
         self.assertIn("## Author Two", generated_md)
-        self.assertIn(
-            '<img src="headshot_two.png" alt="Author Two Avatar"', generated_md
-        )
-        # Verify default avatar styles (100px square)
-        self.assertIn(
-            'style="width: 100px; height: 100px; object-fit: cover; border-radius: 0; display: block; margin: 0 auto;"',
-            generated_md,
-        )
-        self.assertIn(
-            "**Affiliation:** UK Centre for Ecology & Hydrology", generated_md
-        )
+        self.assertIn('<img src="headshot_two.png" alt="Author Two Avatar"', generated_md)
+        # Verify default avatar styles (100px square, centered)
+        self.assertIn('style="width: 100px; height: 100px; object-fit: cover; border-radius: 0; display: block; margin: 0 auto 10px auto;"', generated_md)
+        self.assertIn('<p style="text-align: center;">', generated_md) # Check for the wrapper paragraph
+        self.assertIn("**Affiliation:** UK Centre for Ecology & Hydrology", generated_md)
         self.assertIn("Maintainer", generated_md)
         self.assertNotIn("email", generated_md)
 
@@ -271,10 +257,8 @@ authors:
                 if lines[i].startswith("## NoDesc Author"):
                     found_author_heading = True
                 break
-        self.assertTrue(
-            found_author_heading,
-            "Should directly follow title with author heading if no description",
-        )
+        self.assertTrue(found_author_heading, "Should directly follow title with author heading if no description")
+
 
     def test_authors_page_generation_with_default_title_if_not_specified(self):
         """
@@ -304,10 +288,8 @@ authors:
                 if lines[i].startswith("## Default Title Author"):
                     found_author_heading = True
                 break
-        self.assertTrue(
-            found_author_heading,
-            "Should directly follow title with author heading if no description",
-        )
+        self.assertTrue(found_author_heading, "Should directly follow title with author heading if no description")
+
 
     def test_authors_yml_page_params_not_a_dict(self):
         """
@@ -327,6 +309,7 @@ authors:
         self.assertIn("## Alice", generated_md)
         self.assertNotIn("this is a string", generated_md)
 
+
     def test_avatar_custom_size_from_page_params(self):
         """
         Test that avatars are rendered with a custom size defined in page_params.
@@ -343,10 +326,8 @@ authors:
         self.plugin.on_pre_build(self.config)
         generated_md = self._get_generated_authors_md_content()
         self.assertIsNotNone(generated_md)
-        self.assertIn(
-            'style="width: 150px; height: 150px; object-fit: cover; border-radius: 0; display: block; margin: 0 auto;"',
-            generated_md,
-        )
+        # Expected style for default alignment (center) but custom size
+        self.assertIn('style="width: 150px; height: 150px; object-fit: cover; border-radius: 0; display: block; margin: 0 auto 10px auto;"', generated_md)
 
     def test_avatar_custom_shape_circle_from_page_params(self):
         """
@@ -364,10 +345,9 @@ authors:
         self.plugin.on_pre_build(self.config)
         generated_md = self._get_generated_authors_md_content()
         self.assertIsNotNone(generated_md)
-        self.assertIn(
-            'style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%; display: block; margin: 0 auto;"',
-            generated_md,
-        )
+        # Expected style for default alignment (center) but custom shape
+        self.assertIn('style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%; display: block; margin: 0 auto 10px auto;"', generated_md)
+
 
     def test_avatar_custom_shape_square_from_page_params(self):
         """
@@ -386,14 +366,13 @@ authors:
         self.plugin.on_pre_build(self.config)
         generated_md = self._get_generated_authors_md_content()
         self.assertIsNotNone(generated_md)
-        self.assertIn(
-            'style="width: 100px; height: 100px; object-fit: cover; border-radius: 0; display: block; margin: 0 auto;"',
-            generated_md,
-        )
+        # Expected style for default alignment (center) and default shape
+        self.assertIn('style="width: 100px; height: 100px; object-fit: cover; border-radius: 0; display: block; margin: 0 auto 10px auto;"', generated_md)
+
 
     def test_avatar_defaults_when_page_params_missing(self):
         """
-        Test that avatars use default size and shape when page_params are missing or incomplete.
+        Test that avatars use default size, shape, and alignment when page_params are missing or incomplete.
         """
         yml_content = """
 authors:
@@ -405,10 +384,56 @@ authors:
         self.plugin.on_pre_build(self.config)
         generated_md = self._get_generated_authors_md_content()
         self.assertIsNotNone(generated_md)
-        self.assertIn(
-            'style="width: 100px; height: 100px; object-fit: cover; border-radius: 0; display: block; margin: 0 auto;"',
-            generated_md,
-        )
+        # Expected default style (100px square, centered)
+        self.assertIn('style="width: 100px; height: 100px; object-fit: cover; border-radius: 0; display: block; margin: 0 auto 10px auto;"', generated_md)
+        self.assertIn('<p style="text-align: center;">', generated_md)
+
+
+    def test_avatar_alignment_left(self):
+        """
+        Test avatar aligns left and text wraps around it.
+        """
+        yml_content = """
+page_params:
+  avatar_align: left
+authors:
+  author_one:
+    name: Left Aligned Author
+    avatar: path/to/left_avatar.png
+    affiliation: Left Corp
+    description: This is a long description that should wrap around the left-aligned avatar. It provides details about the author's work and contributions to the project.
+        """
+        self._create_authors_yml(yml_content)
+        self.plugin.on_pre_build(self.config)
+        generated_md = self._get_generated_authors_md_content()
+        self.assertIsNotNone(generated_md)
+        self.assertIn('style="width: 100px; height: 100px; object-fit: cover; border-radius: 0; float: left; margin-right: 15px; margin-bottom: 10px;"', generated_md)
+        self.assertNotIn('<p style="text-align: center;">', generated_md) # Should not be wrapped in a center paragraph
+        self.assertIn('<div style="clear: both;"></div>', generated_md) # Ensure clear is present
+
+
+    def test_avatar_alignment_right(self):
+        """
+        Test avatar aligns right and text wraps around it.
+        """
+        yml_content = """
+page_params:
+  avatar_align: right
+authors:
+  author_one:
+    name: Right Aligned Author
+    avatar: path/to/right_avatar.png
+    affiliation: Right Corp
+    description: This is a description that should wrap around the right-aligned avatar. It details the author's role.
+        """
+        self._create_authors_yml(yml_content)
+        self.plugin.on_pre_build(self.config)
+        generated_md = self._get_generated_authors_md_content()
+        self.assertIsNotNone(generated_md)
+        self.assertIn('style="width: 100px; height: 100px; object-fit: cover; border-radius: 0; float: right; margin-left: 15px; margin-bottom: 10px;"', generated_md)
+        self.assertNotIn('<p style="text-align: center;">', generated_md) # Should not be wrapped in a center paragraph
+        self.assertIn('<div style="clear: both;"></div>', generated_md) # Ensure clear is present
+
 
     def test_on_files_adds_generated_page(self):
         """
@@ -435,9 +460,7 @@ authors:
         for f in updated_files:
             if f.src_path == "authors.md":
                 authors_md_found = True
-                self.assertEqual(
-                    f.abs_src_path, os.path.join(self.docs_dir, "authors.md")
-                )
+                self.assertEqual(f.abs_src_path, os.path.join(self.docs_dir, "authors.md"))
                 break
         self.assertTrue(authors_md_found, "authors.md was not added to MkDocs files.")
         self.assertEqual(len(updated_files), 3)
