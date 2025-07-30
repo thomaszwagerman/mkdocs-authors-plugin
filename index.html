@@ -274,6 +274,25 @@
   
 
       
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="authors/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Authors Page
+
+      </a>
+    </li>
+  
+
+      
     </ul>
   </div>
 </nav>
@@ -432,6 +451,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#where-is-authorsmd" class="md-nav__link">
+    <span class="md-ellipsis">
+      Where is authors.md?
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -507,6 +535,28 @@
   
 
     
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="authors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Authors Page
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -533,6 +583,9 @@
 <img alt="GitHub License" src="https://img.shields.io/github/license/thomaszwagerman/mkdocs-authors-plugin" /></p>
 <p>A custom MkDocs plugin designed to dynamically generate an "Authors" page for your documentation site from a simple YAML file. This allows you to easily manage and display information about contributors without manually updating Markdown files.</p>
 <p>The YAML format is kept consistent with Material's <a href="https://squidfunk.github.io/mkdocs-material/tutorials/blogs/navigation/#defining-authors">"Defining authors"</a>, which enables blog post author attribution.</p>
+<p>If you wish to automatically generate authors based on a git repository, <a href="https://github.com/timvink/mkdocs-git-authors-plugin">git-authors</a> is a tidy plugin to do this. The <code>authors-plugin</code> is developed for 
+instances where you want to manually define an authors list, for example for a wider project team,
+non-code contributors etc.  </p>
 <h2 id="features">Features</h2>
 <ul>
 <li>
@@ -603,6 +656,13 @@ authors:
 <div class="highlight"><pre><span></span><code>mkdocs<span class="w"> </span>serve
 </code></pre></div>
 <p>The plugin will generate the <code>authors.md</code> page, and you should see it in your site's navigation.</p>
+<h3 id="where-is-authorsmd">Where is authors.md?</h3>
+<p>When mkdocs serve detects a file change in <code>docs/</code> , it triggers a rebuild. If <code>authors.md</code> was
+written into <code>docs/</code>, that write itself is a "change," leading to an endless cycle of rebuilding.</p>
+<p>To prevent this endless loop, the plugin adds a <code>File</code> object representing <code>authors.md</code> to MkDocs'
+internal list of files. This tells MkDocs that there is a page called <code>authors.md</code> that should be
+part of the documentation build. This mean a physical file does not have to exist at
+<code>docs/authors.md</code>.</p>
 <h2 id="contributing">Contributing</h2>
 <p>Contributions are welcome! If you find a bug or have a feature request, please open an issue or submit a pull request on the <a href="#">GitHub repository</a>.</p>
 <h2 id="license">License</h2>

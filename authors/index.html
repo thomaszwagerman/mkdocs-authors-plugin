@@ -10,13 +10,11 @@
       
       
       
-        <link rel="canonical" href="https://thomaszwagerman.github.io/mkdocs-authors-plugin/authors_yaml_format/">
+        <link rel="canonical" href="https://thomaszwagerman.github.io/mkdocs-authors-plugin/authors/">
       
       
-        <link rel="prev" href="../configuration/">
+        <link rel="prev" href="../authors_yaml_format/">
       
-      
-        <link rel="next" href="../authors/">
       
       
       <link rel="icon" href="../assets/images/favicon.png">
@@ -24,7 +22,7 @@
     
     
       
-        <title>Authors YAML Format - MkDocs Authors Plugin Documentation</title>
+        <title>Authors Page - MkDocs Authors Plugin Documentation</title>
       
     
     
@@ -76,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#authors-yaml-file-format" class="md-skip">
+        <a href="#our-amazing-authors" class="md-skip">
           Skip to content
         </a>
       
@@ -110,7 +108,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Authors YAML Format
+              Authors Page
             
           </span>
         </div>
@@ -259,11 +257,9 @@
   
   
   
-    
   
-  
-    <li class="md-tabs__item md-tabs__item--active">
-      <a href="./" class="md-tabs__link">
+    <li class="md-tabs__item">
+      <a href="../authors_yaml_format/" class="md-tabs__link">
         
   
   
@@ -280,9 +276,11 @@
   
   
   
+    
   
-    <li class="md-tabs__item">
-      <a href="../authors/" class="md-tabs__link">
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
         
   
   
@@ -390,6 +388,28 @@
       
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../authors_yaml_format/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Authors YAML Format
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
     
   
   
@@ -407,7 +427,7 @@
   
   
   <span class="md-ellipsis">
-    Authors YAML Format
+    Authors Page
     
   </span>
   
@@ -420,7 +440,7 @@
   
   
   <span class="md-ellipsis">
-    Authors YAML Format
+    Authors Page
     
   </span>
   
@@ -443,18 +463,18 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#supported-fields" class="md-nav__link">
+  <a href="#thomas-zwagerman" class="md-nav__link">
     <span class="md-ellipsis">
-      Supported Fields
+      Thomas Zwagerman
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#example-authorsyml" class="md-nav__link">
+  <a href="#thomas-zwagerman_1" class="md-nav__link">
     <span class="md-ellipsis">
-      Example .authors.yml
+      Thomas Zwagerman
     </span>
   </a>
   
@@ -464,28 +484,6 @@
   
 </nav>
       
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../authors/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Authors Page
-    
-  </span>
-  
-
-      </a>
     </li>
   
 
@@ -509,95 +507,21 @@
   
 
 
-<h1 id="authors-yaml-file-format">Authors YAML File Format</h1>
-<p>The <code>mkdocs-authors-plugin</code> expects your author data to be defined in a YAML file (by default, <code>.authors.yml</code>) located in the root of your MkDocs documentation project.</p>
-<p>The YAML file must contain a top-level key named <code>authors</code>, which holds a dictionary of individual author entries. Each author entry is identified by a unique key (e.g., <code>author_one</code>, <code>author_two</code>), which the plugin uses as the author's <code>ID</code>.</p>
-<p>Under each author ID, you can define various fields to describe the author. The plugin will render these fields on the generated authors page.</p>
-<h2 id="supported-fields">Supported Fields</h2>
-<table>
-<thead>
-<tr>
-<th style="text-align: left;">Field</th>
-<th style="text-align: left;">Type</th>
-<th style="text-align: left;">Description</th>
-<th style="text-align: left;">Example Value</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><code>name</code></td>
-<td style="text-align: left;"><code>string</code></td>
-<td style="text-align: left;"><strong>Required.</strong> The full name of the author.</td>
-<td style="text-align: left;"><code>Author One</code></td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>description</code></td>
-<td style="text-align: left;"><code>string</code></td>
-<td style="text-align: left;">A brief description or role of the author. This will be displayed as a blockquote.</td>
-<td style="text-align: left;"><code>Lead Developer</code></td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>avatar</code></td>
-<td style="text-align: left;"><code>string</code></td>
-<td style="text-align: left;">A URL to the author's profile picture or avatar.</td>
-<td style="text-align: left;"><code>https://placehold.co/100x100/aabbcc?text=A1</code></td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>affiliation</code></td>
-<td style="text-align: left;"><code>string</code></td>
-<td style="text-align: left;">The organization or institution the author is affiliated with.</td>
-<td style="text-align: left;"><code>British Antarctic Survey</code></td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>email</code></td>
-<td style="text-align: left;"><code>string</code></td>
-<td style="text-align: left;">The author's email address. Will be rendered as a <code>mailto:</code> link.</td>
-<td style="text-align: left;"><code>author.one@example.com</code></td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>github</code></td>
-<td style="text-align: left;"><code>string</code></td>
-<td style="text-align: left;">The author's GitHub username. Will be rendered as a link to their GitHub profile.</td>
-<td style="text-align: left;"><code>authorone</code></td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>linkedin</code></td>
-<td style="text-align: left;"><code>string</code></td>
-<td style="text-align: left;">The author's LinkedIn profile ID (the part after <code>linkedin.com/in/</code>). Will be rendered as a link.</td>
-<td style="text-align: left;"><code>author-one-profile</code></td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>twitter</code></td>
-<td style="text-align: left;"><code>string</code></td>
-<td style="text-align: left;">The author's Twitter (X) handle. Will be rendered as a link to their Twitter profile.</td>
-<td style="text-align: left;"><code>author_one_dev</code></td>
-</tr>
-</tbody>
-</table>
-<h2 id="example-authorsyml">Example <code>.authors.yml</code></h2>
-<div class="highlight"><pre><span></span><code><span class="c1"># .authors.yml</span>
-<span class="nt">authors</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">author_one</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Author One</span>
-<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Owner</span>
-<span class="w">    </span><span class="nt">avatar</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">headshot_one.png</span>
-<span class="w">    </span><span class="nt">affiliation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">British Antarctic Survey</span>
-<span class="w">    </span><span class="nt">email</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">author.one@example.com</span>
-<span class="w">    </span><span class="nt">github</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">authorone</span>
-<span class="w">    </span><span class="nt">linkedin</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">author-one-profile</span>
-<span class="w">    </span><span class="nt">twitter</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">author_one_dev</span>
-<span class="w">  </span><span class="nt">author_two</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Author Two</span>
-<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Maintainer</span>
-<span class="w">    </span><span class="nt">avatar</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">headshot_two.png</span>
-<span class="w">    </span><span class="nt">affiliation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">UK Centre for Ecology &amp; Hydrology</span>
-<span class="w">    </span><span class="c1"># You can omit any fields not applicable to an author</span>
-<span class="w">  </span><span class="nt">author_three</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Author Three</span>
-<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Core Contributor</span>
-<span class="w">    </span><span class="nt">avatar</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">headshot_three.png</span>
-<span class="w">    </span><span class="nt">affiliation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">University of Edinburgh</span>
-</code></pre></div>
+<h1 id="our-amazing-authors">Our Amazing Authors</h1>
+<h2 id="thomas-zwagerman">Thomas Zwagerman</h2>
+<p><strong>Affiliation:</strong> British Antarctic Survey</p>
+<p>Owner</p>
+<p><img alt="Thomas Zwagerman Avatar" src="https://avatars.githubusercontent.com/u/36264706?v=4" />
+<strong>Email:</strong> <a href="mailto:thozwa@bas.ac.uk">thozwa@bas.ac.uk</a></p>
+<p><strong>Connect:</strong> <a href="https://github.com/thomaszwagerman">GitHub</a> | <a href="https://www.linkedin.com/in/thomaszwagerman">LinkedIn</a> | <a href="https://twitter.com/thomzwa">Twitter</a></p>
+<hr />
+<h2 id="thomas-zwagerman_1">Thomas Zwagerman</h2>
+<p><strong>Affiliation:</strong> British Antarctic Survey</p>
+<p>Owner</p>
+<p><img alt="Thomas Zwagerman Avatar" src="https://avatars.githubusercontent.com/u/36264706?v=4" />
+<strong>Email:</strong> <a href="mailto:thozwa@bas.ac.uk">thozwa@bas.ac.uk</a></p>
+<p><strong>Connect:</strong> <a href="https://github.com/thomaszwagerman">GitHub</a> | <a href="https://www.linkedin.com/in/thomaszwagerman">LinkedIn</a> | <a href="https://twitter.com/thomzwa">Twitter</a></p>
+<hr />
 
 
 

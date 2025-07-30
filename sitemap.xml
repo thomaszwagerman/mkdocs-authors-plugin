@@ -2,14 +2,18 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://thomaszwagerman.github.io/mkdocs-authors-plugin/</loc>
-         <lastmod>2025-07-29</lastmod>
+         <lastmod>2025-07-30</lastmod>
     </url>
     <url>
          <loc>https://thomaszwagerman.github.io/mkdocs-authors-plugin/authors_yaml_format/</loc>
-         <lastmod>2025-07-29</lastmod>
+         <lastmod>2025-07-30</lastmod>
     </url>
     <url>
          <loc>https://thomaszwagerman.github.io/mkdocs-authors-plugin/configuration/</loc>
-         <lastmod>2025-07-29</lastmod>
+         <lastmod>2025-07-30</lastmod>
+    </url>
+    <url>
+         <loc>https://thomaszwagerman.github.io/mkdocs-authors-plugin/authors/</loc>
+         <lastmod>2025-07-30</lastmod>
     </url>
 </urlset>
