@@ -15,3 +15,7 @@ authors:
     github: thomaszwagerman
     linkedin: thomaszwagerman
     twitter: thomzwa
+  author_two:
+    name: Giuseppe
+    description: Project Supervisor
+    avatar: ../images/giuseppe.jpeg
