@@ -7,12 +7,9 @@
 
 A custom MkDocs plugin designed to dynamically generate an "Authors" page for your documentation site from a simple YAML file. This allows you to easily manage and display information about contributors without manually updating Markdown files.
 
-The YAML format is kept consistent with Material's ["Defining authors"](https://squidfunk.github.io/mkdocs-material/tutorials/blogs/navigation/#defining-authors), which enables blog post author attribution.
-
-If you wish to automatically generate authors based on a git repository, [git-authors](https://github.com/timvink/mkdocs-git-authors-plugin) is a tidy plugin to do this.
-
-The `authors-plugin` is developed for instances where you want to manually define an authors list,
-for example for a wider project team, or non-code contributors.  
+The YAML format is kept consistent with Material's ["Defining authors"](https://squidfunk.github.io/mkdocs-material/tutorials/blogs/navigation/#defining-authors), which enables blog post author attribution. This means that if you are
+creating a blog you will not have to define `.authors.yml` twice. Note that `authors` can be used
+independently (without a blog) as well.
 
 ## Features
 
@@ -124,6 +121,13 @@ To prevent this endless loop, the plugin adds a `File` object representing `auth
 internal list of files. This tells MkDocs that there is a page called `authors.md` that should be
 part of the documentation build. This mean a physical file does not have to exist at
 `docs/authors.md`.
+
+## Other plugins
+
+If you wish to automatically generate authors based on a git repository, [git-authors](https://github.com/timvink/mkdocs-git-authors-plugin) is a tidy plugin to do this.
+
+The `authors-plugin` is developed for instances where you want to manually define an authors list,
+for example for a wider project team, or non-code contributors.  
 
 ## Contributing
 
