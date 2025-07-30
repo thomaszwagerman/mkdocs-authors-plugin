@@ -583,9 +583,9 @@
 <img alt="GitHub License" src="https://img.shields.io/github/license/thomaszwagerman/mkdocs-authors-plugin" /></p>
 <p>A custom MkDocs plugin designed to dynamically generate an "Authors" page for your documentation site from a simple YAML file. This allows you to easily manage and display information about contributors without manually updating Markdown files.</p>
 <p>The YAML format is kept consistent with Material's <a href="https://squidfunk.github.io/mkdocs-material/tutorials/blogs/navigation/#defining-authors">"Defining authors"</a>, which enables blog post author attribution.</p>
-<p>If you wish to automatically generate authors based on a git repository, <a href="https://github.com/timvink/mkdocs-git-authors-plugin">git-authors</a> is a tidy plugin to do this. The <code>authors-plugin</code> is developed for 
-instances where you want to manually define an authors list, for example for a wider project team,
-non-code contributors etc.  </p>
+<p>If you wish to automatically generate authors based on a git repository, <a href="https://github.com/timvink/mkdocs-git-authors-plugin">git-authors</a> is a tidy plugin to do this.</p>
+<p>The <code>authors-plugin</code> is developed for instances where you want to manually define an authors list,
+for example for a wider project team, or non-code contributors.  </p>
 <h2 id="features">Features</h2>
 <ul>
 <li>
@@ -595,7 +595,7 @@ non-code contributors etc.  </p>
 <p><strong>Configurable Paths:</strong> Easily customize the input YAML file name and the output Markdown page name.</p>
 </li>
 <li>
-<p><strong>Rich Author Profiles:</strong> Supports fields for name, ID, description, avatar, affiliation, email, GitHub, LinkedIn, and Twitter links.</p>
+<p><strong>Author Profiles:</strong> Supports fields for name, description, avatar, affiliation, email, and social media links.</p>
 </li>
 </ul>
 <h2 id="installation">Installation</h2>
@@ -628,7 +628,16 @@ nav:
 <h3 id="2-create-your-authorsyml-file">2. Create your <code>.authors.yml</code> file</h3>
 <p>Create an <code>.authors.yml</code> file in the root directory of your MkDocs documentation project (the same directory as <code>mkdocs.yml</code>). This file will contain the data for your authors.</p>
 <p>The plugin expects a top-level <code>authors</code> key, under which each author is defined by a unique ID (e.g., <code>author_one</code>).</p>
+<p>You can also define optional page parameters under <code>page_params</code>, such as an overall title and 
+description.</p>
 <div class="highlight"><pre><span></span><code># .authors.yml
+
+# Optional: Define page-level parameters for the generated authors page
+page_params:
+  title: Our Project Team
+  description: &quot;Meet the team.&quot;
+
+# Required: Define individual author data
 authors:
   author_one:
     name: Author One
