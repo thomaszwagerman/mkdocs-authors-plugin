@@ -70,14 +70,11 @@ class AuthorsPlugin(BasePlugin):
             for author in authors_data:
                 markdown_content += f"## {author.get('name', 'Unknown Author')}\n"
 
-                if author.get("id"):
-                    markdown_content += f"**ID:** `{author['id']}`\n"
-
                 if author.get("affiliation"):
                     markdown_content += f"**Affiliation:** {author['affiliation']}\n"
 
                 if author.get("description"):
-                    markdown_content += f"\n> {author['description']}\n"
+                    markdown_content += f"\n {author['description']}\n"
 
                 if author.get("avatar"):
                     markdown_content += f"\n![{author.get('name', 'Avatar')} Avatar]({author['avatar']})\n"
