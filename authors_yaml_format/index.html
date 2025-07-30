@@ -524,16 +524,13 @@
 <h2 id="page-data">Page Data</h2>
 <p>The <code>page_params</code> key is an optional top-level dictionary that lets you configure characteristics
 of the generated authors page itself, such as its main title and an introductory description.</p>
-<h2 id="author-data">Author Data</h2>
-<p>The <code>authors</code> key is a required top-level dictionary which holds individual author entries.
-Each author entry is identified by a unique key (e.g., <code>author_one</code>, <code>author_two</code>), which the plugin
-uses as the author's ID.</p>
 <table>
 <thead>
 <tr>
 <th style="text-align: left;">Field</th>
 <th style="text-align: left;">Type</th>
 <th style="text-align: left;">Description</th>
+<th style="text-align: left;">Default</th>
 <th style="text-align: left;">Example Value</th>
 </tr>
 </thead>
@@ -541,17 +538,37 @@ uses as the author's ID.</p>
 <tr>
 <td style="text-align: left;"><code>title</code></td>
 <td style="text-align: left;"><code>string</code></td>
-<td style="text-align: left;">The main title of the generated authors page. Defaults to <code>Our Amazing Authors</code>.</td>
+<td style="text-align: left;">The main title of the generated authors page.</td>
+<td style="text-align: left;"><code>Our Amazing Authors</code></td>
 <td style="text-align: left;"><code>Project Contributors</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>description</code></td>
 <td style="text-align: left;"><code>string</code></td>
 <td style="text-align: left;">An introductory paragraph displayed directly under the main title.</td>
-<td style="text-align: left;"><code>Meet our team members.</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;"><code>Meet the team members.</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>avatar_size</code></td>
+<td style="text-align: left;"><code>integer</code></td>
+<td style="text-align: left;">Sets the uniform width and height for all author avatars in pixels.</td>
+<td style="text-align: left;"><code>100</code></td>
+<td style="text-align: left;"><code>120</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>avatar_shape</code></td>
+<td style="text-align: left;"><code>string</code></td>
+<td style="text-align: left;">Controls the shape of the avatars. Can be <code>square</code> or <code>circle</code>.</td>
+<td style="text-align: left;"><code>square</code></td>
+<td style="text-align: left;"><code>circle</code></td>
 </tr>
 </tbody>
 </table>
+<h2 id="author-data">Author Data</h2>
+<p>The <code>authors</code> key is a required top-level dictionary which holds individual author entries.</p>
+<p>Each author entry is identified by a unique key (e.g., <code>author_one</code>, <code>author_two</code>), which the plugin
+uses as the author's ID.</p>
 <p>Under each author ID, you can define various fields to describe the author.
 The plugin will render these fields on the generated authors page.</p>
 <table>
@@ -621,7 +638,8 @@ The plugin will render these fields on the generated authors page.</p>
 <span class="nt">page_params</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Our Project Team</span>
 <span class="w">  </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Meet</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">people</span><span class="nv"> </span><span class="s">behind</span><span class="nv"> </span><span class="s">our</span><span class="nv"> </span><span class="s">project.&quot;</span>
-
+<span class="w">  </span><span class="nt">avatar_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">150</span><span class="w">           </span>
+<span class="w">  </span><span class="nt">avatar_shape</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">circle</span><span class="w">       </span>
 
 <span class="c1"># Required: Define individual author data</span>
 <span class="nt">authors</span><span class="p">:</span>
