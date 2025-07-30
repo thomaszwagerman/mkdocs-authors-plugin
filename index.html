@@ -608,13 +608,13 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
 </code></pre></div>
 <h2 id="usage">Usage</h2>
 <h3 id="1-configure-mkdocsyml">1. Configure <code>mkdocs.yml</code></h3>
-<p>Add the <code>authors_plugin</code> to your <code>plugins</code> list in your <code>mkdocs.yml</code> file. You also need to include the <code>authors.md</code> page in your <code>nav</code> section.</p>
+<p>Add the <code>authors</code> plugin to your <code>plugins</code> list in your <code>mkdocs.yml</code> file. You also need to include the <code>authors.md</code> page in your <code>nav</code> section.</p>
 <div class="highlight"><pre><span></span><code># mkdocs.yml
 site_name: My Awesome Docs
 
 plugins:
   - search
-  - authors_plugin:
+  - authors:
       # Optional: specify the authors file if it&#39;s not .authors.yml
       # authors_file: my_custom_authors.yaml
       # Optional: specify the output page name if it&#39;s not authors.md
