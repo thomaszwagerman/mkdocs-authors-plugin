@@ -130,7 +130,7 @@ class AuthorsPlugin(BasePlugin):
 
                 if author.get("email"):
                     markdown_content += (
-                        f"**Email:** [{author['email']}](mailto:{author['email']})\n"
+                        f"\n **Email:** [{author['email']}](mailto:{author['email']})\n"
                     )
 
                 social_links = []
