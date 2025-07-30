@@ -1,6 +1,6 @@
 page_params:
-  title: Our Incredible Team!
-  description: "Meet the team."
+  title: The Team
+  description: "Meet the team behind the mkdocs-authors-plugin."
   avatar_shape: circle
   avatar_size: 150
   avatar_align: left
@@ -8,7 +8,7 @@ page_params:
 authors:
   author_one:
     name: Thomas Zwagerman
-    description: Owner
+    description: Owner & Maintainer
     avatar: https://avatars.githubusercontent.com/u/36264706?v=4
     affiliation: British Antarctic Survey
     email: thozwa@bas.ac.uk
@@ -16,11 +16,7 @@ authors:
     linkedin: thomaszwagerman
     twitter: thomzwa
   author_two:
-    name: Thomas Zwagerman
-    description: Owner
-    avatar: https://avatars.githubusercontent.com/u/36264706?v=4
+    name: Zhomas Twagerman
+    description: Definitely not Thomas Zwagerman
+    avatar: /images/imposter.png
     affiliation: British Antarctic Survey
-    email: thozwa@bas.ac.uk
-    github: thomaszwagerman
-    linkedin: thomaszwagerman
-    twitter: thomzwa
