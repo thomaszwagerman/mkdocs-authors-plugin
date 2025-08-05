@@ -1,6 +1,7 @@
 # MkDocs Authors Plugin
 ![tests](https://github.com/thomaszwagerman/mkdocs-authors-plugin/actions/workflows/tests.yml/badge.svg)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/mkdocs-authors-plugin)
+[![PyPI version](https://img.shields.io/pypi/v/mkdocs-badges)](https://pypi.org/project/mkdocs-authors-plugin/)
 [![codecov](https://codecov.io/gh/thomaszwagerman/mkdocs-authors-plugin/graph/badge.svg?token=Q6FAWKRJMK)](https://codecov.io/gh/thomaszwagerman/mkdocs-authors-plugin)
 ![GitHub License](https://img.shields.io/github/license/thomaszwagerman/mkdocs-authors-plugin)
 
